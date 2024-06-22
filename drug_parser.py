@@ -35,7 +35,7 @@ def insert_SQL(drug_name):
         connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
         cursor = connection.cursor(buffered=True)
 
-        insert_statement = """INSERT INTO medicines (medicine_name) VALUES (%s);"""
+        insert_statement = """INSERT IGNORE INTO medicines (medicine_name) VALUES (%s);"""
 
         cursor.execute(insert_statement, (drug_name,))
 
