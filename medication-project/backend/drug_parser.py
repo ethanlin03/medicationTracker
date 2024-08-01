@@ -1,7 +1,7 @@
 import requests
 import mysql.connector
 from bs4 import BeautifulSoup
-from mysql_constants import Constants
+from Projects.medicationProject.backend.mysql_constants import Constants
 
 page_url = 'https://www.webmd.com/drugs/2/index'
 
