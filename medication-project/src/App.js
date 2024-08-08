@@ -11,40 +11,42 @@ function App() {
     setDisplay("login")
   }*/
 
-    useEffect(() => {
-      // Function to dynamically load the script
-      const loadScript = (src) => {
-        return new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = src;
-          script.async = true;
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-          document.body.appendChild(script);
-        });
-      };
-  
-      // Load the confetti script
-      loadScript('https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js')
-        .then(() => {
-          console.log('Confetti script loaded successfully');
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }, []);
+  const signup = () => {
+    setDisplay("signup")
+  }
 
-  const handleConfettiClick = () => {
-    if (window.confetti) {
-      window.confetti();
-    } else {
-      console.error('Confetti script not loaded');
-    }
-  };
+  const login = () => {
+    setDisplay("login")
+  }
 
-  if (display === "login" || display === "signup") {
+  if (display === "login") {
     return (
       <div className="App">
+        <div className="main-container">
+          <div className="container2">
+            <div className="header-container"><h1>Medication Tracker</h1></div>
+            <h2>Login</h2>
+            <form id="registration-form">
+            <label htmlFor="username">Username:</label>
+              <input type="text" id="username" name="username" required /><br /><br />
+
+              <label htmlFor="password">Password:</label>
+              <input type="text" id="password" name="password" required /><br /><br />
+              
+              <button id="submit-form" type="submit">Submit</button>
+            </form>
+            <div className="action-container">
+              Don't have an account?
+              <button id="signup" onClick={signup}>Signup</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  else if(display === "signup") {
+    return (
+    <div className="App">
         <div className="main-container">
           <div className="container2">
             <div className="header-container"><h1>Medication Tracker</h1></div>
@@ -55,11 +57,18 @@ function App() {
 
               <label htmlFor="last_name">Last Name:</label>
               <input type="text" id="last_name" name="last_name" required /><br /><br />
+
+              <label htmlFor="username">Username:</label>
+              <input type="text" id="username" name="username" required /><br /><br />
+
+              <label htmlFor="password">Password:</label>
+              <input type="text" id="password" name="password" required /><br /><br />
               
               <button id="submit-form" type="submit">Submit</button>
             </form>
             <div className="action-container">
-              <button id="confetti-button" onClick={handleConfettiClick}>Click For Confetti</button>
+              Already have an account?
+              <button id="login" onClick={login}>Login</button>
             </div>
           </div>
         </div>
