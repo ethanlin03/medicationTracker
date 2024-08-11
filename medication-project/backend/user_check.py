@@ -13,8 +13,10 @@ def insertUser(first, last):
         cursor = connection.cursor(buffered=True)
 
         createTable = """
-            CREATE TABLE IF NOT EXISTS people (
+            CREATE TABLE IF NOT EXISTS users (
             person_id INT PRIMARY KEY AUTO_INCREMENT,
+            username VARCHAR(255) UNIQUE,
+            password VARCHAR(255), 
             first_name VARCHAR(255),
             last_name VARCHAR(255)
             );
@@ -23,7 +25,7 @@ def insertUser(first, last):
         cursor.execute(createTable)
 
         insertLogin = """
-            INSERT INTO people(first_name, last_name) VALUES (%s, %s);
+            INSERT INTO users(username, password, first_name, last_name) VALUES (%s, %s);
         """
 
         cursor.execute(insertLogin, (first, last))
