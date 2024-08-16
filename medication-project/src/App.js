@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Homepage from './Homepage';
 
 import './App.css';
 import '@fontsource/roboto/300.css';
@@ -13,6 +14,8 @@ function App() {
     first_name: "",
     last_name: "",
   })
+
+  const [returned_info, setReturnedInfo] = useState()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,6 +46,7 @@ function App() {
     } catch (error) {
       console.error('Error:', error);
     }
+    setDisplay("login")
   }
 
   const submit_login = async(e) => {
@@ -52,10 +56,11 @@ function App() {
     try {
       const response = await axios.post('http://localhost:5000/login-form', info);
       console.log(response.data); // Handle backend response
+      setReturnedInfo(response.data.message)
     } catch (error) {
       console.error('Error:', error);
     }
-    setDisplay("login")
+    setDisplay("homepage")
   }
 
   if (display === "login") {
@@ -111,6 +116,13 @@ function App() {
             </div>
           </div>
         </div>
+      </div>
+    )
+  }
+  else if(display === "homepage") {
+    return (
+      <div className="App">
+        <Homepage returned_info={returned_info}/>
       </div>
     )
   }
