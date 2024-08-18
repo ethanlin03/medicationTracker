@@ -4,6 +4,7 @@ import Homepage from './Homepage';
 
 import './App.css';
 import '@fontsource/roboto/300.css';
+import LoginForm from './LoginForm';
 
 function App() {
   const [display, setDisplay] = useState("login")
@@ -49,43 +50,9 @@ function App() {
     setDisplay("login")
   }
 
-  const submit_login = async(e) => {
-    e.preventDefault()
-    console.log(info)
-
-    try {
-      const response = await axios.post('http://localhost:5000/login-form', info);
-      console.log(response.data); // Handle backend response
-      setReturnedInfo(response.data.message)
-    } catch (error) {
-      console.error('Error:', error);
-    }
-    setDisplay("homepage")
-  }
-
   if (display === "login") {
     return (
-      <div className="App">
-        <div className="main-container">
-          <div className="container2">
-            <div className="header-container"><h1>Medication Tracker</h1></div>
-            <h2>Login</h2>
-            <form id="registration-form" onSubmit={submit_login}>
-            <label htmlFor="username">Username:</label>
-              <input type="text" id="username" onChange={handleChange} name="username" required /><br /><br />
-
-              <label htmlFor="password">Password:</label>
-              <input type="text" id="password" onChange={handleChange} name="password" required /><br /><br />
-              
-              <button id="submit-form" type="submit">Submit</button>
-            </form>
-            <div className="action-container">
-              Don't have an account?
-              <button id="signup" onClick={signup}>Signup</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <LoginForm returned_info setReturnedInfo={setReturnedInfo} setDisplay={setDisplay}/>
     )
   }
   else if(display === "signup") {
