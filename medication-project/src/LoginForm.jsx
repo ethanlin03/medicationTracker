@@ -1,13 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 
-const LoginForm = ({setReturnedInfo, setDisplay}) => {
-    const [info, setInfo] = useState({
-        username: "",
-        password: "",
-        first_name: "",
-        last_name: "",
-      })
+const LoginForm = ({info, setInfo, setReturnedInfo, setDisplay}) => {
     
     const handleChange = (e) => {
         const { name, value } = e.target;

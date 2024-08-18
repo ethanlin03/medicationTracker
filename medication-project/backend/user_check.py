@@ -87,7 +87,7 @@ def signup_form():
     msg = insertUser(username, password, first, last)
     
     # Return a response (optional)
-    response = {'message': msg, 'username': username, 'password': password}
+    response = {'message': msg, 'first': first, 'last': last}
     print(msg)
 
     return jsonify(response), 200
