@@ -47,7 +47,6 @@ const LoginForm = ({info, setInfo, returnedInfo, setReturnedInfo, setDisplay}) =
           console.error('Error:', error);
         }
     }
-    //NEED TO WORK ON THIS
 
     return (
         <div className="App">

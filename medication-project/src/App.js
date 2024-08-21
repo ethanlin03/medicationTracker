@@ -6,6 +6,7 @@ import './App.css';
 import '@fontsource/roboto/300.css';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
+import Formpage from './Formpage';
 
 function App() {
   const [display, setDisplay] = useState("login")
@@ -53,9 +54,12 @@ function App() {
   }
   else if(display === "homepage") {
     return (
-      <div className="App">
-        <Homepage returned_info={returned_info}/>
-      </div>
+      <Homepage returned_info={returned_info} setDisplay={setDisplay}/>
+    )
+  }
+  else if(display === "formpage") {
+    return (
+      <Formpage/>
     )
   }
 }
