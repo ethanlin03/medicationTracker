@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 
-const LoginForm = ({info, setInfo, setReturnedInfo, setDisplay}) => {
+const LoginForm = ({info, setInfo, returnedInfo, setReturnedInfo, setDisplay}) => {
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -14,19 +14,40 @@ const LoginForm = ({info, setInfo, setReturnedInfo, setDisplay}) => {
         setDisplay("signup")
     }
 
+    const getUserPass = async(e, username, password) => {
+      e.preventDefault()
+      try {
+        const response = await axios.get('http://localhost:5000/homepage', {
+          params: {
+            username: username,
+            password: password,
+          }
+        });
+        setReturnedInfo({
+          first_name: response.data.first,
+          last_name: response.data.last,
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
     const submit_login = async(e) => {
         e.preventDefault()
         console.log(info)
-    
         try {
           const response = await axios.post('http://localhost:5000/login-form', info);
           console.log(response.data); // Handle backend response
-          setReturnedInfo(response.data.message)
+          if(response.data.message === "Login successful.")
+          {
+            getUserPass(e, response.data.username, response.data.password)
+          }
+          setDisplay("homepage")
         } catch (error) {
           console.error('Error:', error);
         }
-        setDisplay("homepage")
     }
+    //NEED TO WORK ON THIS
 
     return (
         <div className="App">

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-const Homepage = ({returned_info}) => {
+const Homepage = ({info, setInfo, returned_info}) => {
     return (
         <div>
-            <h1>{returned_info}</h1>
+            <h1>Welcome {returned_info.first_name} {returned_info.last_name}</h1>
         </div>
     )
 }

@@ -38,6 +38,36 @@ def checkUser(username, password):
 
     return msg
 
+def getUserPass(username, password):
+    try:
+        connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
+        cursor = connection.cursor(buffered=True)
+
+        query = """
+            SELECT first_name, last_name FROM users WHERE username = %s AND password = %s
+        """
+
+        cursor.execute(query, (username, password))
+        result = cursor.fetchall()
+        print(result)
+
+        if result:
+            first = result[0][0]
+            last = result[0][1]
+
+
+    except mysql.connector.Error as error:
+        print("Error occured: ", error)
+
+    finally:
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+        print("Connection closed")
+
+    return first, last
+
 def insertUser(username, password, first, last):
     msg = "User already exists."
     try:
@@ -106,6 +136,19 @@ def login_form():
     print(msg)
 
     return jsonify(response), 200
+
+@app.route('/homepage', methods=['GET'])
+def login_success():
+
+    username = request.args.get('username', type=str)
+    password = request.args.get('password', type=str)
+    first, last = getUserPass(username, password)
+    print(first)
+    print(last)
+    response = {'first': first, 'last': last}
+
+    return jsonify(response), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)
