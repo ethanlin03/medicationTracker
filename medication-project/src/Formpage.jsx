@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Box, CssBaseline, ThemeProvider, TextField, InputAdornment } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
+import Autocomplete from '@mui/material/Autocomplete';
+import Stack from '@mui/material/Stack';
+import axios from 'axios';
 
 const Formpage = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const [inputValue, setInputValue] = useState('');
-  
-    const options = [
-      { value: 'aspirin', label: 'Aspirin' },
-      { value: 'ibuprofen', label: 'Ibuprofen' },
-      { value: 'acetaminophen', label: 'Acetaminophen' },
-    ];
+    const [medications, setMedications] = useState([]); 
+
+    const retrieveMeds = async() => {
+        try {
+            const response = await axios.get('http://localhost:5000/medications');
+            console.log(response.data)
+            setMedications(response.data)
+          } catch (error) {
+            console.error('Error:', error);
+          }
+    }
+
+    useEffect(() => {
+        retrieveMeds();
+      }, []);
   
     const handleSelectChange = (event) => {
       setSelectedOption(event.target.value);
@@ -26,31 +38,12 @@ const Formpage = () => {
                 <h1 style={{ fontFamily: 'Lexend, sans-serif', paddingTop: '40px', marginBottom: '50px', color: '#65b5ff' }}>Add medication</h1>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px' }}>
                 <form style={{ width: '100%' }}>
-                    <TextField
-                        variant="outlined"
-                        label="Medication"
-                        type="text"
-                        value={inputValue}
-                        onChange={handleInputChange}
+                    <Autocomplete
+                        id="Medications"
+                        freeSolo
+                        options={medications.map((option) => option)}
+                        renderInput={(params) => <TextField {...params} label="Medications" />}
                         sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
-                        InputProps={{
-                            startAdornment: (
-                            <InputAdornment position="start">
-                                <TextField
-                                select
-                                value={selectedOption}
-                                onChange={handleSelectChange}
-                                sx={{ minWidth: 120, marginRight: '8px' }}
-                                >
-                                {options.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                    </MenuItem>
-                                ))}
-                                </TextField>
-                            </InputAdornment>
-                            ),
-                        }}
                     />
                     <TextField
                     variant="outlined"

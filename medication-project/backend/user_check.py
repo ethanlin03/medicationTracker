@@ -1,10 +1,39 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from mysql_constants import Constants
+from bs4 import BeautifulSoup
 import mysql.connector
+import requests
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}) # allows localhost to access the flask server
+
+def selectMedicationsOptions():
+    try:
+        connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
+        cursor = connection.cursor(buffered=True)
+
+        meds = """
+            SELECT medicine_name FROM medicines
+        """
+
+        cursor.execute(meds)
+        valid = cursor.fetchall()
+
+        if valid:
+            return valid
+
+
+    except mysql.connector.Error as error:
+        print("Error occured: ", error)
+
+    finally:
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+        print("Connection closed")
+
 
 def checkUser(username, password):
     msg = "Incorrect username/password."
@@ -149,6 +178,14 @@ def login_success():
 
     return jsonify(response), 200
 
+@app.route('/medications', methods=['GET'])
+def medication_retrieval():
+
+    medications = selectMedicationsOptions()
+
+    medicines = [item[0] for item in medications]
+
+    return jsonify(medicines), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
