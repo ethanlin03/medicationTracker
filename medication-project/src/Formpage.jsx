@@ -54,7 +54,7 @@ const Formpage = () => {
                     />
                     <TextField
                     variant="outlined"
-                    label="Dosage"
+                    label="Dosage (mg)"
                     type="text"
                     name="Dosage"
                     sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}

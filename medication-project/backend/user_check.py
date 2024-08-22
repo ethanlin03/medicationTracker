@@ -183,7 +183,7 @@ def medication_retrieval():
 
     medications = selectMedicationsOptions()
 
-    medicines = [item[0] for item in medications]
+    medicines = [item[0].capitalize() for item in medications]
 
     return jsonify(medicines), 200
 
