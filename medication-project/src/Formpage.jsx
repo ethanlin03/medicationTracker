@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Box, CssBaseline, ThemeProvider, TextField, InputAdornment } from '@mui/material';
+import { Button, Box, CssBaseline, ThemeProvider, TextField, InputAdornment, IconButton } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from '@mui/material/Autocomplete';
+import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 
-const Formpage = () => {
-    const [selectedOption, setSelectedOption] = useState('');
-    const [inputValue, setInputValue] = useState('');
+const Formpage = ({setDisplay}) => {
     const [medications, setMedications] = useState([]); 
 
     const retrieveMeds = async() => {
@@ -24,17 +23,24 @@ const Formpage = () => {
         retrieveMeds();
       }, []);
   
-    const handleSelectChange = (event) => {
-      setSelectedOption(event.target.value);
-    };
-  
-    const handleInputChange = (event) => {
-      setInputValue(event.target.value);
+    const clickHome = async(e) => {
+        setDisplay("homepage");
     };
     return (
         <div className="App">
             <div style={{ width: '30%', margin: '5% auto', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', textAlign: 'center' }}>
             <>
+            <IconButton
+                onClick={clickHome}
+                sx={{
+                position: 'absolute',
+                top: 10,
+                right: 10,
+                fontSize: 70,
+                }}
+            >
+                <HomeIcon sx={{fontSize: 38}} />
+            </IconButton>
                 <h1 style={{ fontFamily: 'Lexend, sans-serif', paddingTop: '40px', marginBottom: '50px', color: '#65b5ff' }}>Add medication</h1>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px' }}>
                 <form style={{ width: '100%' }}>

@@ -59,7 +59,7 @@ function App() {
   }
   else if(display === "formpage") {
     return (
-      <Formpage/>
+      <Formpage setDisplay={setDisplay}/>
     )
   }
 }
