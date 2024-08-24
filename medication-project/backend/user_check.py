@@ -73,7 +73,7 @@ def getUserPass(username, password):
         cursor = connection.cursor(buffered=True)
 
         query = """
-            SELECT first_name, last_name FROM users WHERE username = %s AND password = %s
+            SELECT first_name, last_name, person_id FROM users WHERE username = %s AND password = %s
         """
 
         cursor.execute(query, (username, password))
@@ -83,6 +83,7 @@ def getUserPass(username, password):
         if result:
             first = result[0][0]
             last = result[0][1]
+            user_id = result[0][2]
 
 
     except mysql.connector.Error as error:
@@ -95,7 +96,7 @@ def getUserPass(username, password):
         connection.close()
         print("Connection closed")
 
-    return first, last
+    return first, last, user_id
 
 def insertUser(username, password, first, last):
     msg = "User already exists."
@@ -171,10 +172,11 @@ def login_success():
 
     username = request.args.get('username', type=str)
     password = request.args.get('password', type=str)
-    first, last = getUserPass(username, password)
+    first, last, user_id = getUserPass(username, password)
     print(first)
     print(last)
-    response = {'first': first, 'last': last}
+    print(user_id)
+    response = {'first': first, 'last': last, 'user_id': user_id}
 
     return jsonify(response), 200
 

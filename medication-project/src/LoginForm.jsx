@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 
-const LoginForm = ({info, setInfo, returnedInfo, setReturnedInfo, setDisplay}) => {
+const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDisplay}) => {
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,10 +23,16 @@ const LoginForm = ({info, setInfo, returnedInfo, setReturnedInfo, setDisplay}) =
             password: password,
           }
         });
+        console.log(response.data)
         setReturnedInfo({
           first_name: response.data.first,
           last_name: response.data.last,
         });
+
+        setUserId({
+          userId: response.data.user_id
+        })
+        console.log(userId)
       } catch (error) {
         console.error('Error:', error);
       }

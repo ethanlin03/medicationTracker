@@ -44,7 +44,7 @@ function App() {
 
   if (display === "login") {
     return (
-      <LoginForm info={info} setInfo={setInfo} returnedInfo={returned_info} setReturnedInfo={setReturnedInfo} setDisplay={setDisplay}/>
+      <LoginForm info={info} setInfo={setInfo} userId={userId} setUserId={setUserId} setReturnedInfo={setReturnedInfo} setDisplay={setDisplay}/>
     )
   }
   else if(display === "signup") {

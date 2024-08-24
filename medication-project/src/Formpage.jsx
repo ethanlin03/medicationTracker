@@ -7,16 +7,38 @@ import Stack from '@mui/material/Stack';
 import axios from 'axios';
 
 const Formpage = ({setDisplay}) => {
+    const [value, setValue] = useState("");
+    const [inputValue, setInputValue] = useState("");
     const [medications, setMedications] = useState([]); 
+    const [medicationStats, setMedicationStats] = useState({
+        medication_name: "",
+        amount: "",
+        dosage: "",
+        notes: "",
+    })
+    //might need to add current date
 
     const retrieveMeds = async() => {
         try {
             const response = await axios.get('http://localhost:5000/medications');
             console.log(response.data)
-            setMedications(response.data)
+            const transformedMedications = response.data.map((name, index) => ({
+                id: index + 1,
+                value: name
+            }));
+            setMedications(transformedMedications)
+            console.log(transformedMedications)
           } catch (error) {
             console.error('Error:', error);
           }
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setMedicationStats((prev) => {
+            return { ...prev, medication_name: value ? value.id : ""}
+        })
+        console.log(value)
     }
 
     useEffect(() => {
@@ -25,6 +47,17 @@ const Formpage = ({setDisplay}) => {
   
     const clickHome = async(e) => {
         setDisplay("homepage");
+    };
+
+    const handleMedStats = async(e) => {
+        console.log(medicationStats)
+        e.preventDefault()
+        try {
+            const response = await axios.post("http://localhost:5000/medications", medicationStats)
+            console.log(response.data)
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
     return (
         <div className="App">
@@ -43,34 +76,48 @@ const Formpage = ({setDisplay}) => {
             </IconButton>
                 <h1 style={{ fontFamily: 'Lexend, sans-serif', paddingTop: '40px', marginBottom: '50px', color: '#65b5ff' }}>Add medication</h1>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px' }}>
-                <form style={{ width: '100%' }}>
+                <form style={{ width: '100%' }} onSubmit={handleMedStats}>
                     <Autocomplete
                         id="Medications"
                         freeSolo
-                        options={medications.map((option) => option)}
-                        renderInput={(params) => <TextField {...params} label="Medications" />}
+                        value={value}
+                        onChange={(event, newValue) => {
+                        setValue(newValue);
+                        console.log(value)
+                        }}
+                        inputValue={inputValue}
+                        onInputChange={(event, newInputValue) => {
+                        setInputValue(newInputValue);
+                        console.log(inputValue)
+                        }}
+                        options={medications.map((option) => option.value)}
+                        renderInput={(params) => <TextField {...params} label="Medications" name="medication_name"/>}
                         sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
+                        
                     />
                     <TextField
                     variant="outlined"
                     label="Amount Per Day"
                     type="text"
-                    name="Amount Per Day"
+                    name="amount"
                     sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
+                    onChange={handleChange}
                     />
                     <TextField
                     variant="outlined"
                     label="Dosage (mg)"
                     type="text"
-                    name="Dosage"
+                    name="dosage"
                     sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
+                    onChange={handleChange}
                     />
                     <TextField
                     variant="outlined"
                     label="Important Notes/Instructions"
                     type="text"
-                    name="Important Notes/Instructions"
+                    name="notes"
                     sx={{ width: '100%', backgroundColor: 'white', marginBottom: '40px' }}
+                    onChange={handleChange}
                     />
                     <Button type="submit" variant="contained" sx={{ backgroundColor: '#65b5ff', width: '70%', marginBottom: '20px' }}>Submit</Button>
                 </form>
