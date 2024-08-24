@@ -16,33 +16,49 @@ const Formpage = ({setDisplay}) => {
         dosage: "",
         notes: "",
     })
-    //might need to add current date
+    
+    const[currentDay, setCurrentDay] = useState({
+        month: "",
+        day: "",
+        year: "",
+    })
 
     const retrieveMeds = async() => {
         try {
             const response = await axios.get('http://localhost:5000/medications');
             console.log(response.data)
-            const transformedMedications = response.data.map((name, index) => ({
-                id: index + 1,
-                value: name
-            }));
-            setMedications(transformedMedications)
-            console.log(transformedMedications)
+            setMedications(response.data);
           } catch (error) {
             console.error('Error:', error);
           }
     }
 
+    const day = () => {
+        var today = new Date();
+        var m = String(today.getMonth() + 1).padStart(2, '0');
+        var d = String(today.getDate()).padStart(2, '0');
+        var y = today.getFullYear();
+        console.log(y)
+        setCurrentDay({
+            month: m,
+            day: d,
+            year: y,
+        })
+        console.log(currentDay)
+    }
+    //need to work on
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setMedicationStats((prev) => {
-            return { ...prev, medication_name: value ? value.id : ""}
+            return { ...prev, [name]: value}
         })
         console.log(value)
     }
 
     useEffect(() => {
-        retrieveMeds();
+        retrieveMeds(); 
+        day();
       }, []);
   
     const clickHome = async(e) => {
@@ -52,12 +68,12 @@ const Formpage = ({setDisplay}) => {
     const handleMedStats = async(e) => {
         console.log(medicationStats)
         e.preventDefault()
-        try {
+        /**try {
             const response = await axios.post("http://localhost:5000/medications", medicationStats)
             console.log(response.data)
         } catch (error) {
             console.error('Error:', error);
-        }
+        }*/
     };
     return (
         <div className="App">
@@ -78,19 +94,29 @@ const Formpage = ({setDisplay}) => {
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px' }}>
                 <form style={{ width: '100%' }} onSubmit={handleMedStats}>
                     <Autocomplete
-                        id="Medications"
-                        freeSolo
                         value={value}
                         onChange={(event, newValue) => {
-                        setValue(newValue);
-                        console.log(value)
+                            setValue(newValue)
+                            setMedicationStats((prev) => {
+                                return {
+                                    ...prev,
+                                medication_name: newValue
+                                }
+                            })
                         }}
                         inputValue={inputValue}
                         onInputChange={(event, newInputValue) => {
-                        setInputValue(newInputValue);
-                        console.log(inputValue)
+                            setInputValue(newInputValue)
+                            setMedicationStats((prev) => {
+                                return {
+                                    ...prev,
+                                medication_name: newInputValue
+                                }
+                            })
                         }}
-                        options={medications.map((option) => option.value)}
+                        id="Medications"
+                        freeSolo
+                        options={medications.map((option) => option)}
                         renderInput={(params) => <TextField {...params} label="Medications" name="medication_name"/>}
                         sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
                         
