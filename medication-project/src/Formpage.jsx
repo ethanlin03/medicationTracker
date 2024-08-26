@@ -6,7 +6,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 
-const Formpage = ({userId, addedMedications, setAddedMedications, setDisplay}) => {
+const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, setDisplay}) => {
     const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
     const [medications, setMedications] = useState([]);
@@ -26,9 +26,9 @@ const Formpage = ({userId, addedMedications, setAddedMedications, setDisplay}) =
             const response = await axios.get('http://localhost:5000/medications');
             console.log(response.data)
             setMedications(response.data);
-          } catch (error) {
+        } catch (error) {
             console.error('Error:', error);
-          }
+        }
     }
 
     const day = () => {
@@ -76,6 +76,7 @@ const Formpage = ({userId, addedMedications, setAddedMedications, setDisplay}) =
                 const newMedication = medicationStats
                 console.log(newMedication)
                 setAddedMedications(prevMedications => [...prevMedications, newMedication]);
+                setUserId(response.data.person_id)
                 setDisplay("homepage")
             }
         } catch (error) {

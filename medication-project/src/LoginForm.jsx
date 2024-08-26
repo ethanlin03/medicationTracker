@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
 const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDisplay}) => {
-    
+    useEffect(() => {
+      if (userId) {
+        console.log(userId);
+      }
+    }, [userId]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setInfo((prev) => {
@@ -14,8 +19,7 @@ const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDispla
         setDisplay("signup")
     }
 
-    const getUserPass = async(e, username, password) => {
-      e.preventDefault()
+    const getUserPass = async(username, password) => {  
       try {
         const response = await axios.get('http://localhost:5000/homepage', {
           params: {
@@ -28,11 +32,8 @@ const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDispla
           first_name: response.data.first,
           last_name: response.data.last,
         });
+        setUserId(response.data.user_id)
 
-        setUserId({
-          userId: response.data.user_id
-        })
-        console.log(userId)
       } catch (error) {
         console.error('Error:', error);
       }
@@ -46,7 +47,7 @@ const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDispla
           console.log(response.data); // Handle backend response
           if(response.data.message === "Login successful.")
           {
-            getUserPass(e, response.data.username, response.data.password)
+            await getUserPass(response.data.username, response.data.password)
           }
           setDisplay("homepage")
         } catch (error) {

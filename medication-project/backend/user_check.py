@@ -169,6 +169,31 @@ def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year
 
     return msg, medicine_id
 
+def getAddedMeds(person_id):
+
+    try:
+        connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
+        cursor = connection.cursor(buffered=True)
+
+        querySelect = """
+            SELECT medication_id, medication_name, amount, dosage, notes, month, day, year FROM users_medications WHERE person_id = %s;
+        """
+
+        cursor.execute(querySelect, (person_id,))
+        addedMedications = cursor.fetchall()
+        return addedMedications
+
+    except mysql.connector.Error as error:
+        print("Error occured: ", error)
+
+    finally:
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+        print("Connection closed")
+
+
 @app.route('/signup-form', methods=['POST'])
 def signup_form():
     data = request.json  # This will contain your form data
@@ -207,9 +232,6 @@ def login_success():
     username = request.args.get('username', type=str)
     password = request.args.get('password', type=str)
     first, last, user_id = getUserPass(username, password)
-    print(first)
-    print(last)
-    print(user_id)
     response = {'first': first, 'last': last, 'user_id': user_id}
 
     return jsonify(response), 200
@@ -240,6 +262,29 @@ def users_medication_insertion():
 
     response = {'message': msg, 'medicine_id': medicine_id, 'person_id': person_id}
 
+    return jsonify(response), 200
+
+@app.route('/added-medications', methods=['GET'])
+def get_added_medications():
+
+    user_id = request.args.get('userId', type=int)
+    print(user_id)
+    results = getAddedMeds(user_id)
+
+    response = [
+        {
+            "id": med[0],
+            "medication_name": med[1],
+            "amount": med[2],
+            "dosage": med[3],
+            "notes": med[4],
+            "month": med[5],
+            "day": med[6],
+            "year": med[7]
+        }
+        for med in results
+    ]
+    
     return jsonify(response), 200
 
 if __name__ == '__main__':
