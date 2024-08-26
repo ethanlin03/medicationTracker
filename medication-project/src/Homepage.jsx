@@ -6,7 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Divider from '@mui/material/Divider';
 import Formpage from './Formpage';
 
-const Homepage = ({returned_info, setDisplay}) => {
+const Homepage = ({returned_info, display, setDisplay, addedMedications, setAddedMedications}) => {
     const handleClick = () => {
         console.log('Icon clicked!');
         // Add your click handler logic here
@@ -17,6 +17,7 @@ const Homepage = ({returned_info, setDisplay}) => {
     };
     return (
         <div className="App">
+            
             <div>
             <IconButton
                 onClick={handleClick}
@@ -71,7 +72,7 @@ const Homepage = ({returned_info, setDisplay}) => {
                     </Box>
             </IconButton>
  
-        </div>
+            </div>
         </div>
     )
 }

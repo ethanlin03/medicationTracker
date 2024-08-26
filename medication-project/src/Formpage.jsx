@@ -6,10 +6,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 
-const Formpage = ({userId, setDisplay}) => {
+const Formpage = ({userId, addedMedications, setAddedMedications, setDisplay}) => {
     const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
-    const [medications, setMedications] = useState([]); 
+    const [medications, setMedications] = useState([]);
     const [medicationStats, setMedicationStats] = useState({
         person_id: "",
         medication_name: "",
@@ -72,11 +72,17 @@ const Formpage = ({userId, setDisplay}) => {
             console.log(response.data)
 
             if(response.data.message === "User's medication has been inserted")
+            {
+                const newMedication = medicationStats
+                console.log(newMedication)
+                setAddedMedications(prevMedications => [...prevMedications, newMedication]);
                 setDisplay("homepage")
+            }
         } catch (error) {
             console.error('Error:', error);
         }
     };
+
     return (
         <div className="App">
             <div style={{ width: '30%', margin: '5% auto', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', textAlign: 'center' }}>
