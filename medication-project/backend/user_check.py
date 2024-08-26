@@ -135,6 +135,40 @@ def insertUser(username, password, first, last):
 
     return msg
 
+def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year):
+    msg = "Medicine hasn't been added"
+
+    try:
+        connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
+        cursor = connection.cursor(buffered=True)
+
+        querySelect = """
+            SELECT medicine_id FROM medicines WHERE medicine_name = %s;
+        """
+
+        queryInsert = """
+            INSERT INTO users_medications(medication_id, person_id, medication_name, amount, dosage, notes, month, day, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """
+
+        cursor.execute(querySelect, (med_name,))
+        medicine_id = cursor.fetchall()[0][0]
+
+        cursor.execute(queryInsert, (medicine_id, person_id, med_name, amount, dosage, notes, month, day, year))
+        msg = "User's medication has been inserted"
+
+
+    except mysql.connector.Error as error:
+        print("Error occured: ", error)
+
+    finally:
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+        print("Connection closed")
+
+    return msg, medicine_id
+
 @app.route('/signup-form', methods=['POST'])
 def signup_form():
     data = request.json  # This will contain your form data
@@ -188,6 +222,25 @@ def medication_retrieval():
     medicines = [item[0].capitalize() for item in medications]
 
     return jsonify(medicines), 200
+
+@app.route('/medication-insert', methods=['POST'])
+def users_medication_insertion():
+
+    data = request.json
+
+    person_id = data.get('person_id')
+    med_name = data.get('medication_name')
+    amount = data.get('amount')
+    dosage = data.get('dosage')
+    notes = data.get('notes')
+    month = data.get('month')
+    day = data.get('day')
+    year = data.get('year')
+    msg, medicine_id = insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year)
+
+    response = {'message': msg, 'medicine_id': medicine_id, 'person_id': person_id}
+
+    return jsonify(response), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

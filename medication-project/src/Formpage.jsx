@@ -6,21 +6,19 @@ import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 
-const Formpage = ({setDisplay}) => {
+const Formpage = ({userId, setDisplay}) => {
     const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
     const [medications, setMedications] = useState([]); 
     const [medicationStats, setMedicationStats] = useState({
+        person_id: "",
         medication_name: "",
         amount: "",
         dosage: "",
         notes: "",
-    })
-    
-    const[currentDay, setCurrentDay] = useState({
-        month: "",
-        day: "",
-        year: "",
+        month: 0,
+        day: 0,
+        year: 0,
     })
 
     const retrieveMeds = async() => {
@@ -35,18 +33,19 @@ const Formpage = ({setDisplay}) => {
 
     const day = () => {
         var today = new Date();
-        var m = String(today.getMonth() + 1).padStart(2, '0');
-        var d = String(today.getDate()).padStart(2, '0');
+        var m = parseInt(String(today.getMonth() + 1).padStart(2, '0'));
+        var d = parseInt(String(today.getDate()).padStart(2, '0'));
         var y = today.getFullYear();
-        console.log(y)
-        setCurrentDay({
-            month: m,
-            day: d,
-            year: y,
+        setMedicationStats((prev) => {
+            return {
+                ...prev,
+                month: m,
+                day: d,
+                year: y,
+                person_id: userId
+            }
         })
-        console.log(currentDay)
     }
-    //need to work on
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -68,12 +67,15 @@ const Formpage = ({setDisplay}) => {
     const handleMedStats = async(e) => {
         console.log(medicationStats)
         e.preventDefault()
-        /**try {
-            const response = await axios.post("http://localhost:5000/medications", medicationStats)
+        try {
+            const response = await axios.post('http://localhost:5000/medication-insert', medicationStats);
             console.log(response.data)
+
+            if(response.data.message === "User's medication has been inserted")
+                setDisplay("homepage")
         } catch (error) {
             console.error('Error:', error);
-        }*/
+        }
     };
     return (
         <div className="App">
