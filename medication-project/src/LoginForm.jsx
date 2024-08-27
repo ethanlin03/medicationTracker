@@ -56,7 +56,7 @@ const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDispla
     }
 
     return (
-        <div className="App">
+      <div className="App">
           <div className="main-container">
             <div className="container2">
               <div className="header-container"><h1>Medication Tracker</h1></div>

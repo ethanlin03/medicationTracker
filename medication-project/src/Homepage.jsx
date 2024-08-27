@@ -100,7 +100,7 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
             </h1>
             {display === "homepage" && addedMedications.length > 0 && (
                
-                <div style={{ width: '80%', margin: '5% auto', marginTop: '20px', marginBottom: '10px', backgroundColor: '#fff', borderRadius: '20px', textAlign: 'center' }}>
+                <div style={{ width: '80%', margin: '5% auto', marginTop: '20px', marginBottom: '10px', backgroundColor: 'transparent', borderRadius: '20px', textAlign: 'center' }}>
                     <h2 style={{ fontFamily: 'Lexend, sans-serif', margin: '20px', color: '#65b5ff' }}>Added Medications</h2>
                         <MedicationCard addedMedications={addedMedications} setAddedMedications={setAddedMedications}/>
                 </div>
