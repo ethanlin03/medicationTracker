@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Formpage from './Formpage';
 import axios from 'axios';
+import MedicationCard from './MedicationCard';
 
 const Homepage = ({returned_info, display, setDisplay, addedMedications, setAddedMedications, userId}) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -80,6 +81,7 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                   'aria-labelledby': 'basic-button',
                 }}
             >
+                <MenuItem onClick={handleAddMedicine}>Add Medication</MenuItem>
                 <MenuItem onClick={handleClickLogout}>Logout</MenuItem>
             </Menu>
             <IconButton
@@ -98,32 +100,9 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
             </h1>
             {display === "homepage" && addedMedications.length > 0 && (
                
-                <div style={{ width: '80%', margin: '5% auto', marginTop: '20px', backgroundColor: '#fff', borderRadius: '20px', textAlign: 'center' }}>
+                <div style={{ width: '80%', margin: '5% auto', marginTop: '20px', marginBottom: '10px', backgroundColor: '#fff', borderRadius: '20px', textAlign: 'center' }}>
                     <h2 style={{ fontFamily: 'Lexend, sans-serif', margin: '20px', color: '#65b5ff' }}>Added Medications</h2>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-                        {addedMedications.map((med, index) => (
-                            <div
-                            key={index}
-                            style={{
-                                flex: '1 1 calc(50% - 20px)', // Adjust width of each item
-                                marginLeft: index % 2 === 0 ? '0' : '10px', // Add space to the left of odd items
-                                marginRight: index % 2 === 0 ? '10px' : '0', // Add space to the right of even items
-                                marginBottom: '0px',
-                                display: 'flex',
-                                justifyContent: index % 2 === 0 ? 'flex-start' : 'flex-end' // Align based on index
-                            }}
-                            >
-                            <Card style={{ width: '100%' }}>
-                                <CardContent>
-                                <Typography variant="h5" component="div" fontWeight='bold'>
-                                    {med.medication_name}
-                                </Typography>
-                                {med.amount} per day, {med.dosage}mg
-                                </CardContent>
-                            </Card>
-                            </div>
-                        ))}
-                    </div>
+                        <MedicationCard addedMedications={addedMedications} setAddedMedications={setAddedMedications}/>
                 </div>
             )}
             {display === "homepage" && addedMedications.length === 0 && (

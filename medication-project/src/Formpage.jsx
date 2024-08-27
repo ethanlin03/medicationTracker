@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Box, CssBaseline, ThemeProvider, TextField, InputAdornment, IconButton } from '@mui/material';
+import { Button, Box, CssBaseline, ThemeProvider, TextField, InputAdornment, IconButton, Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from '@mui/material/Autocomplete';
 import HomeIcon from '@mui/icons-material/Home';
@@ -9,6 +9,7 @@ import axios from 'axios';
 const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, setDisplay}) => {
     const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
+    const [message, setMessage] = useState("");
     const [medications, setMedications] = useState([]);
     const [medicationStats, setMedicationStats] = useState({
         person_id: "",
@@ -79,14 +80,17 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
                 setUserId(response.data.person_id)
                 setDisplay("homepage")
             }
+            else
+                setMessage(response.data.message)
         } catch (error) {
             console.error('Error:', error);
         }
     };
+    //need to make a composite key for person_id and medicine_id
 
     return (
         <div className="App">
-            <div style={{ width: '30%', margin: '5% auto', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', textAlign: 'center' }}>
+            <div style={{ width: '30%', margin: '5% auto', marginBottom: '10px', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', textAlign: 'center' }}>
             <>
             <IconButton
                 onClick={clickHome}
@@ -155,10 +159,12 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
                     onChange={handleChange}
                     />
                     <Button type="submit" variant="contained" sx={{ backgroundColor: '#65b5ff', width: '70%', marginBottom: '20px' }}>Submit</Button>
+
                 </form>
-                </Box>
+                </Box>  
             </>
             </div>
+            <Typography style={{color: 'red'}}>{message}</Typography>
         </div>
     )
 }

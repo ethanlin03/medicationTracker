@@ -136,7 +136,7 @@ def insertUser(username, password, first, last):
     return msg
 
 def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year):
-    msg = "Medicine hasn't been added"
+    msg = "Medicine was already added"
 
     try:
         connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)

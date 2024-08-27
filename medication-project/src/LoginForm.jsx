@@ -66,7 +66,7 @@ const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDispla
                 <input type="text" id="username" onChange={handleChange} name="username" required /><br /><br />
   
                 <label htmlFor="password">Password:</label>
-                <input type="text" id="password" onChange={handleChange} name="password" required /><br /><br />
+                <input type="password" id="password" onChange={handleChange} name="password" required /><br /><br />
                 
                 <button id="submit-form" type="submit">Submit</button>
               </form>
