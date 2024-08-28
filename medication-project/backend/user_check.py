@@ -135,25 +135,43 @@ def insertUser(username, password, first, last):
 
     return msg
 
-def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year):
+def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year, importance):
     msg = "Medicine was already added"
 
     try:
         connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
         cursor = connection.cursor(buffered=True)
 
+        createTable  = """
+            CREATE TABLE IF NOT EXISTS users_medications (
+                medication_id INT,
+                person_id INT,
+                medication_name VARCHAR(255),
+                amount VARCHAR(255),
+                dosage VARCHAR(255),
+                notes VARCHAR(255),
+                month VARCHAR(255),
+                day VARCHAR(255),
+                year VARCHAR(255),
+                importance INT,
+                PRIMARY KEY(medication_id, person_id)
+            );
+        """
+
+        cursor.execute(createTable)
+
         querySelect = """
             SELECT medicine_id FROM medicines WHERE medicine_name = %s;
         """
 
         queryInsert = """
-            INSERT INTO users_medications(medication_id, person_id, medication_name, amount, dosage, notes, month, day, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+            INSERT INTO users_medications(medication_id, person_id, medication_name, amount, dosage, notes, month, day, year, importance) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
         """
 
         cursor.execute(querySelect, (med_name,))
         medicine_id = cursor.fetchall()[0][0]
 
-        cursor.execute(queryInsert, (medicine_id, person_id, med_name, amount, dosage, notes, month, day, year))
+        cursor.execute(queryInsert, (medicine_id, person_id, med_name, amount, dosage, notes, month, day, year, importance))
         msg = "User's medication has been inserted"
 
 
@@ -176,7 +194,7 @@ def getAddedMeds(person_id):
         cursor = connection.cursor(buffered=True)
 
         querySelect = """
-            SELECT medication_id, medication_name, amount, dosage, notes, month, day, year FROM users_medications WHERE person_id = %s;
+            SELECT medication_id, medication_name, amount, dosage, notes, month, day, year, importance FROM users_medications WHERE person_id = %s;
         """
 
         cursor.execute(querySelect, (person_id,))
@@ -258,7 +276,8 @@ def users_medication_insertion():
     month = data.get('month')
     day = data.get('day')
     year = data.get('year')
-    msg, medicine_id = insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year)
+    importance = data.get('importance')
+    msg, medicine_id = insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year, importance)
 
     response = {'message': msg, 'medicine_id': medicine_id, 'person_id': person_id}
 
@@ -280,7 +299,8 @@ def get_added_medications():
             "notes": med[4],
             "month": med[5],
             "day": med[6],
-            "year": med[7]
+            "year": med[7],
+            "importance" : med[8]
         }
         for med in results
     ]

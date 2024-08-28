@@ -4,11 +4,17 @@ import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from '@mui/material/Autocomplete';
 import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import axios from 'axios';
 
 const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, setDisplay}) => {
     const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
+    const [importanceValue, setImportanceValue] = useState(-1);
     const [message, setMessage] = useState("");
     const [medications, setMedications] = useState([]);
     const [medicationStats, setMedicationStats] = useState({
@@ -20,7 +26,22 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
         month: 0,
         day: 0,
         year: 0,
+        importance: 0,
     })
+
+    const importanceChange = (event) => {
+        const newImportanceValue =  event.target.value === 'Most Important' ? 2 : (event.target.value === 'Somewhat Important' ? 1 : 0);
+
+        setImportanceValue(newImportanceValue);
+        setMedicationStats((prev) => {
+            return {
+                ...prev,
+                importance: newImportanceValue
+            }
+        })
+        console.log(importanceValue)
+        console.log(medicationStats.importance)
+    }
 
     const retrieveMeds = async() => {
         try {
@@ -158,6 +179,21 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
                     sx={{ width: '100%', backgroundColor: 'white', marginBottom: '40px' }}
                     onChange={handleChange}
                     />
+                    <FormControl sx={{ width: '100%', backgroundColor: 'white', marginBottom: '40px', display: 'flex', alignItems: 'center'}}>
+                        <FormLabel id="medication-importance" sx={{fontSize: '20px', fontWeight: 'bold'}}>Importance</FormLabel>
+                        <RadioGroup
+                            row
+                            aria-labelledby="medication-importance-radio-buttons"
+                            defaultValue="female"
+                            name="medication-importance-radio-buttons"
+                            value={importanceValue}
+                            onChange={importanceChange}
+                        >
+                            <FormControlLabel value="Most Important" control={<Radio />} sx={{color: 'red'}} label="High!!!" />
+                            <FormControlLabel value="Somewhat Important" control={<Radio />} sx={{color: 'red'}} label="Medium!!" />
+                            <FormControlLabel value="Least Important" control={<Radio />} sx={{color: 'red'}} label="Low!" />
+                        </RadioGroup>
+                    </FormControl>
                     <Button type="submit" variant="contained" sx={{ backgroundColor: '#65b5ff', width: '70%', marginBottom: '20px' }}>Submit</Button>
 
                 </form>

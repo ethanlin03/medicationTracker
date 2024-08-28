@@ -59,7 +59,7 @@ const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDispla
       <div className="App">
           <div className="main-container">
             <div className="container2">
-              <div className="header-container"><h1>Medication Tracker</h1></div>
+              <div className="header-container"><h1>PillPal</h1></div>
               <h2>Login</h2>
               <form id="registration-form" onSubmit={submit_login}>
               <label htmlFor="username">Username:</label>

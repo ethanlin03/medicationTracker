@@ -30,7 +30,7 @@ const SignupForm = ({info, setInfo, setDisplay}) => {
         <div className="App">
             <div className="main-container">
               <div className="container2">
-                <div className="header-container"><h1>Medication Tracker</h1></div>
+                <div className="header-container"><h1>PillPal</h1></div>
                 <h2>Signup</h2>
                 <form id="registration-form" onSubmit={submit_signup}>
                   <label htmlFor="first_name">First Name:</label>

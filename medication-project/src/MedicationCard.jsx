@@ -1,6 +1,8 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Box, IconButton, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Box, CardActions, IconButton, Typography } from '@mui/material';
 
 const MedicationCard = ({addedMedications, setAddedMedications}) => {
     return (
@@ -28,15 +30,32 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                           }
                 }
                 >
-                <Card style={{ width: '100%' }}>
+                <Card style={{ width: '100%', position: 'relative' }}>
+                    <CardActions style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
+                        <EditIcon/>
+                    </CardActions>
+                    <CardActions style={{ position: 'absolute', top: '0', right: '0', padding: '8px' }}>
+                        <InfoOutlinedIcon/>
+                    </CardActions>
                     <CardContent>
-                    <Typography variant="h5" component="div" color="text.primary" fontWeight='bold' gutterBottom>
-                        {med.medication_name}
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    {med.amount} per day, {med.dosage}mg
-                    Date Added: {med.month}/{med.day}/{med.year}
-                    </Typography>
+                        <Typography variant="h5" component="div" color="text.primary" fontWeight='bold'>
+                            {med.medication_name}
+                        </Typography>
+                        <Box sx={{
+                                color: med.importance === 2 ? 'red' :
+                                    med.importance === 1 ? 'skyblue' : 'gray', 
+
+                                marginBottom: '20px'
+                                }}
+                        >
+                            {med.importance === 2 ? "Most Important" : (med.importance === 1 ? "Somewhat Important" : "Least Important")}
+                        </Box>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            {med.dosage}mg with {med.amount} per day
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            Last Taken: {med.month}/{med.day}/{med.year}
+                        </Typography>
                     </CardContent>
                 </Card>
                 </div>
