@@ -14,7 +14,7 @@ import axios from 'axios';
 const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, setDisplay}) => {
     const [value, setValue] = useState("");
     const [inputValue, setInputValue] = useState("");
-    const [importanceValue, setImportanceValue] = useState(-1);
+    const [importanceValue, setImportanceValue] = useState("");
     const [message, setMessage] = useState("");
     const [medications, setMedications] = useState([]);
     const [medicationStats, setMedicationStats] = useState({
@@ -32,7 +32,7 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
     const importanceChange = (event) => {
         const newImportanceValue =  event.target.value === 'Most Important' ? 2 : (event.target.value === 'Somewhat Important' ? 1 : 0);
 
-        setImportanceValue(newImportanceValue);
+        setImportanceValue(event.target.value);
         setMedicationStats((prev) => {
             return {
                 ...prev,
@@ -183,7 +183,6 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
                         <RadioGroup
                             row
                             aria-labelledby="medication-importance-radio-buttons"
-                            defaultValue="female"
                             name="medication-importance-radio-buttons"
                             value={importanceValue}
                             onChange={importanceChange}
