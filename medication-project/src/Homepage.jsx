@@ -115,14 +115,18 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
             <IconButton 
             onClick={handleAddMedicine}
                     sx={{
-                    fontSize: 20}}>
+                        width: '80%',
+                        padding: 0,
+                        borderRadius: 0,
+                        marginTop: '10px'
+                    }}>
                     <Box
                         sx={{
                             display: 'flex',
                             justifyContent: 'center',  // Centers horizontally
                             alignItems: 'center',      // Centers vertically
                             height: 100,           // Full viewport height
-                            width: 500,
+                            width: '120%',
                         }}>
                         <Box component="section" 
                             sx={{   
@@ -132,10 +136,10 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                                 flexDirection: 'column',
                                 justifyContent: 'center',  // Centers horizontally
                                 alignItems: 'center',      // Centers vertically
-                                width: 500,
+                                width: '120%',
                             }}>
-                            <Typography sx={{color:'gray'}}>Add medicine</Typography>
-                            <AddBoxOutlinedIcon style={{ height: 30, width: 200 }}/>
+                            <Typography sx={{color:'gray', fontSize: 20}}>Add medicine</Typography>
+                            <AddBoxOutlinedIcon style={{ height: 30, width: '200' }}/>
                         </Box>
                     </Box>
             </IconButton>

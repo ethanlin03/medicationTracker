@@ -38,7 +38,7 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                         <InfoOutlinedIcon/>
                     </CardActions>
                     <CardContent>
-                        <Typography variant="h5" component="div" color="text.primary" fontWeight='bold'>
+                        <Typography variant="h5" component="div" color="text.primary" fontWeight='bold' sx={{ textTransform: 'capitalize' }}>
                             {med.medication_name}
                         </Typography>
                         <Box sx={{

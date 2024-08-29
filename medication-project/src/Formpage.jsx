@@ -93,7 +93,7 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
             const response = await axios.post('http://localhost:5000/medication-insert', medicationStats);
             console.log(response.data)
 
-            if(response.data.message === "User's medication has been inserted")
+            if(response.data.message !== "Medicine was already added")
             {
                 const newMedication = medicationStats
                 console.log(newMedication)
@@ -107,7 +107,6 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
             console.error('Error:', error);
         }
     };
-    //need to make a composite key for person_id and medicine_id
 
     return (
         <div className="App">

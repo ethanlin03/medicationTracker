@@ -169,10 +169,21 @@ def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year
         """
 
         cursor.execute(querySelect, (med_name,))
-        medicine_id = cursor.fetchall()[0][0]
+        result = cursor.fetchone()
+        
+        if result:
+            medicine_id = result[0]
+
+        else:
+            insertMedicine = """
+                INSERT INTO medicines(medicine_name) VALUES (%s);
+            """
+            cursor.execute(insertMedicine, (med_name,))
+            medicine_id = cursor.lastrowid
+            msg = "New medicine was added and"
 
         cursor.execute(queryInsert, (medicine_id, person_id, med_name, amount, dosage, notes, month, day, year, importance))
-        msg = "User's medication has been inserted"
+        msg += "user's medication has been inserted"
 
 
     except mysql.connector.Error as error:
