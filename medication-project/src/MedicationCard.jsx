@@ -1,10 +1,23 @@
+import { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Box, CardActions, IconButton, Typography } from '@mui/material';
+import { CardActions, Typography, Box, IconButton, Modal } from '@mui/material';
 
 const MedicationCard = ({addedMedications, setAddedMedications}) => {
+    const [showInfoCard, setShowInfoCard] = useState(false);
+    const [selectedMed, setSelectedMed] = useState();
+
+    const handleInfoClick = (med) => {
+        setSelectedMed(med)
+        setShowInfoCard(true)
+    }
+
+    const closeModal = () => {
+        setShowInfoCard(false)
+    }
+
     return (
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {addedMedications.map((med, index) => (
@@ -32,16 +45,20 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                 >
                 <Card style={{ width: '100%', position: 'relative' }}>
                     <CardActions style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-                        <EditIcon/>
+                        <IconButton>
+                            <EditIcon/>
+                        </IconButton>
                     </CardActions>
                     <CardActions style={{ position: 'absolute', top: '0', right: '0', padding: '8px' }}>
-                        <InfoOutlinedIcon/>
+                        <IconButton onClick={() => handleInfoClick(med)}>
+                            <InfoOutlinedIcon/>
+                        </IconButton>
                     </CardActions>
                     <CardContent>
                         <Typography variant="h5" component="div" color="text.primary" fontWeight='bold' sx={{ textTransform: 'capitalize' }}>
                             {med.medication_name}
                         </Typography>
-                        <Box sx={{
+                        <Typography sx={{
                                 color: med.importance === 2 ? 'red' :
                                     med.importance === 1 ? 'skyblue' : 'gray', 
 
@@ -49,7 +66,7 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                                 }}
                         >
                             {med.importance === 2 ? "Most Important" : (med.importance === 1 ? "Somewhat Important" : "Least Important")}
-                        </Box>
+                        </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
                             {med.dosage}mg with {med.amount} per day
                         </Typography>
@@ -60,6 +77,56 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                 </Card>
                 </div>
             ))}
+
+            {showInfoCard && (
+                <>
+                    <div
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        }}
+                    />
+                    <Modal
+                        open={showInfoCard}
+                        onClose={closeModal}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Card sx={{ width: '50%', padding: '20px' }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                <Typography variant="h5" component="div" color="text.primary" fontWeight="bold" sx={{ textTransform: 'capitalize' }}>
+                                    {selectedMed.medication_name}
+                                </Typography>
+                                <Typography sx={{ alignSelf: 'flex-start', fontSize: '16px', color: 'text.secondary' }}>
+                                    Notes: {selectedMed.notes}
+                                </Typography>
+                            </Box>
+                            <Typography sx={{ mb: 0.5 }} color="text.secondary">
+                                Dosage: {selectedMed.dosage}mg
+                            </Typography>
+                            <Typography sx={{ mb: 0.5 }} color="text.secondary">
+                                Amount Per Day: {selectedMed.amount}
+                            </Typography>
+                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                Last Taken: {selectedMed.month}/{selectedMed.day}/{selectedMed.year}
+                            </Typography>
+                            <Box sx={{
+                                color: selectedMed.importance === 2 ? 'red' :
+                                    selectedMed.importance === 1 ? 'skyblue' : 'gray'
+                            }}>
+                                Importance: {selectedMed.importance === 2 ? "Most Important" : (selectedMed.importance === 1 ? "Somewhat Important" : "Least Important")}
+                            </Box>
+                        </Card>
+                    </Modal>
+                </>
+            )}
         </div>
     )
 }

@@ -58,91 +58,95 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
     return (
         <div className="App">
             <div>
-            <IconButton
-                id="Menu"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClickMenu}
-                sx={{
-                position: 'absolute',
-                top: 10,
-                left: 10,
-                fontSize: 70,
-                }}
-            >
-                <MenuIcon sx={{fontSize: 38}}/>
-            </IconButton>
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={handleAddMedicine}>Add Medication</MenuItem>
-                <MenuItem onClick={handleClickLogout}>Logout</MenuItem>
-            </Menu>
-            <IconButton
-                onClick={handleClick}
-                sx={{
-                position: 'absolute',
-                top: 10,
-                right: 10,
-                fontSize: 70,
-                }}
-            >
-                <AccountCircleOutlinedIcon sx={{fontSize: 38}} />
-            </IconButton>
-            <h1 style={{color:'gray'}}>
-                Welcome {returned_info.first_name} {returned_info.last_name}!
-            </h1>
-            {display === "homepage" && addedMedications.length > 0 && (
-               
-                <div style={{ width: '80%', margin: '5% auto', marginTop: '20px', marginBottom: '10px', backgroundColor: 'transparent', borderRadius: '20px', textAlign: 'center' }}>
-                    <h2 style={{ fontFamily: 'Lexend, sans-serif', margin: '20px', color: '#65b5ff' }}>Added Medications</h2>
-                        <MedicationCard addedMedications={addedMedications} setAddedMedications={setAddedMedications}/>
-                </div>
-            )}
-            {display === "homepage" && addedMedications.length === 0 && (
-                <div style={{padding: '10px'}}>
-                    <Typography style={{color: 'gray'}}>
-                        No medications
-                    </Typography>
-                </div>
-            )}
-            <IconButton 
-            onClick={handleAddMedicine}
+                <IconButton
+                    id="Menu"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClickMenu}
                     sx={{
-                        width: '80%',
-                        padding: 0,
-                        borderRadius: 0,
-                        marginTop: '10px'
-                    }}>
-                    <Box
+                    position: 'absolute',
+                    top: 10,
+                    left: 10,
+                    fontSize: 70,
+                    }}
+                >
+                    <MenuIcon sx={{fontSize: 38}}/>
+                </IconButton>
+                
+                <Menu
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={handleAddMedicine}>Add Medication</MenuItem>
+                    <MenuItem onClick={handleClickLogout}>Logout</MenuItem>
+                </Menu>
+
+                <IconButton
+                    onClick={handleClick}
+                    sx={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
+                    fontSize: 70,
+                    }}
+                >
+                    <AccountCircleOutlinedIcon sx={{fontSize: 38}} />
+                </IconButton>
+
+                <h1 style={{color:'gray'}}>
+                    Welcome {returned_info.first_name} {returned_info.last_name}!
+                </h1>
+                {display === "homepage" && addedMedications.length > 0 && (
+                
+                    <div style={{ width: '80%', margin: '5% auto', marginTop: '20px', marginBottom: '10px', backgroundColor: 'transparent', borderRadius: '20px', textAlign: 'center' }}>
+                        <h2 style={{ fontFamily: 'Lexend, sans-serif', margin: '20px', color: '#65b5ff' }}>Added Medications</h2>
+                            <MedicationCard addedMedications={addedMedications} setAddedMedications={setAddedMedications}/>
+                    </div>
+                )}
+                {display === "homepage" && addedMedications.length === 0 && (
+                    <div style={{padding: '10px'}}>
+                        <Typography style={{color: 'gray'}}>
+                            No medications
+                        </Typography>
+                    </div>
+                )}
+                
+                <IconButton 
+                onClick={handleAddMedicine}
                         sx={{
-                            display: 'flex',
-                            justifyContent: 'center',  // Centers horizontally
-                            alignItems: 'center',      // Centers vertically
-                            height: 100,           // Full viewport height
-                            width: '120%',
+                            width: '80%',
+                            padding: 0,
+                            borderRadius: 0,
+                            marginTop: '10px'
                         }}>
-                        <Box component="section" 
-                            sx={{   
-                                p: 2,
-                                border: '2px dashed grey', 
+                        <Box
+                            sx={{
                                 display: 'flex',
-                                flexDirection: 'column',
                                 justifyContent: 'center',  // Centers horizontally
                                 alignItems: 'center',      // Centers vertically
+                                height: 100,           // Full viewport height
                                 width: '120%',
                             }}>
-                            <Typography sx={{color:'gray', fontSize: 20}}>Add medicine</Typography>
-                            <AddBoxOutlinedIcon style={{ height: 30, width: '200' }}/>
+                            <Box component="section" 
+                                sx={{   
+                                    p: 2,
+                                    border: '2px dashed grey', 
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',  // Centers horizontally
+                                    alignItems: 'center',      // Centers vertically
+                                    width: '120%',
+                                }}>
+                                <Typography sx={{color:'gray', fontSize: 20}}>Add medicine</Typography>
+                                <AddBoxOutlinedIcon style={{ height: 30, width: '200' }}/>
+                            </Box>
                         </Box>
-                    </Box>
-            </IconButton>
+                </IconButton>
  
             </div>
         </div>
