@@ -222,6 +222,32 @@ def getAddedMeds(person_id):
         connection.close()
         print("Connection closed")
 
+def updateMeds(person_id, med_id, amount, dosage, notes, importance):
+    msg = "Medicine wasn't updated"
+    try:
+        connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
+        cursor = connection.cursor(buffered=True)
+
+        queryUpdate = """
+            UPDATE users_medications SET amount = %s, dosage = %s, notes = %s, importance = %s WHERE person_id = %s AND medication_id = %s;
+        """
+
+        cursor.execute(queryUpdate, (amount, dosage, notes, importance, person_id, med_id))
+        connection.commit()
+        
+        if cursor.rowcount > 0:
+            msg = "Medicine was updated"
+
+        return msg
+
+    except mysql.connector.Error as error:
+        print("Error occured: ", error)
+
+    finally:
+        
+        cursor.close()
+        connection.close()
+        print("Connection closed")
 
 @app.route('/signup-form', methods=['POST'])
 def signup_form():
@@ -315,6 +341,23 @@ def get_added_medications():
         }
         for med in results
     ]
+    
+    return jsonify(response), 200
+
+@app.route('/medication-update', methods=['POST'])
+def update_medication():
+
+    data = request.json
+    person_id = data.get('userId')
+    med_id = data.get('medId')
+    amount = data.get('amount')
+    dosage = data.get('dosage')
+    notes = data.get('notes')
+    importance = data.get('importance')
+
+    msg = updateMeds(person_id, med_id, amount, dosage, notes, importance)
+
+    response = {'message' : msg}
     
     return jsonify(response), 200
 
