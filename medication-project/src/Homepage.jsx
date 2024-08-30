@@ -115,14 +115,15 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                         </Typography>
                     </div>
                 )}
-                
+
                 <IconButton 
                 onClick={handleAddMedicine}
                         sx={{
                             width: '80%',
                             padding: 0,
                             borderRadius: 0,
-                            marginTop: '10px'
+                            marginTop: '10px',
+                            marginBottom: '50px'
                         }}>
                         <Box
                             sx={{

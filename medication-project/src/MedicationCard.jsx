@@ -4,9 +4,11 @@ import CardContent from '@mui/material/CardContent';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { CardActions, Typography, Box, IconButton, Modal } from '@mui/material';
+import EditForm from './EditForm';
 
 const MedicationCard = ({addedMedications, setAddedMedications}) => {
     const [showInfoCard, setShowInfoCard] = useState(false);
+    const [showEditForm, setShowEditForm] = useState(false);
     const [selectedMed, setSelectedMed] = useState();
 
     const handleInfoClick = (med) => {
@@ -14,8 +16,17 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
         setShowInfoCard(true)
     }
 
-    const closeModal = () => {
+    const handleEditClick = (med) => {
+        setSelectedMed(med)
+        setShowEditForm(true)
+    }
+
+    const closeInfoModal = () => {
         setShowInfoCard(false)
+    }
+
+    const closeEditModal = () => {
+        setShowEditForm(false)
     }
 
     return (
@@ -45,7 +56,7 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                 >
                 <Card style={{ width: '100%', position: 'relative' }}>
                     <CardActions style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-                        <IconButton>
+                        <IconButton onClick={() => handleEditClick(med)}>
                             <EditIcon/>
                         </IconButton>
                     </CardActions>
@@ -62,6 +73,8 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                                 color: med.importance === 2 ? 'red' :
                                     med.importance === 1 ? 'skyblue' : 'gray', 
 
+                                fontWeight: med.importance === 2 ? '900' :
+                                    med.importance === 1 ? '600' : '400',
                                 marginBottom: '20px'
                                 }}
                         >
@@ -92,7 +105,7 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                     />
                     <Modal
                         open={showInfoCard}
-                        onClose={closeModal}
+                        onClose={closeInfoModal}
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
@@ -125,6 +138,12 @@ const MedicationCard = ({addedMedications, setAddedMedications}) => {
                             </Box>
                         </Card>
                     </Modal>
+                </>
+            )}
+
+            {showEditForm && (
+                <>
+                    <EditForm showEditForm={showEditForm} setShowEditForm={setShowEditForm} selectedMed={selectedMed}/>
                 </>
             )}
         </div>
