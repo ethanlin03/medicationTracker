@@ -11,6 +11,7 @@ import Formpage from './Formpage';
 function App() {
   const [display, setDisplay] = useState("login")
   const [userId, setUserId] = useState(0)
+  const [currentMedId, setCurrentMedId] = useState(0)
   const [addedMedications, setAddedMedications] = useState([])
   const [info, setInfo] = useState({
     username: "",
@@ -54,6 +55,7 @@ function App() {
     )
   }
   else if(display === "homepage") {
+    console.log(addedMedications)
     return (
       <Homepage returned_info={returned_info} display={display} setDisplay={setDisplay} addedMedications={addedMedications} setAddedMedications={setAddedMedications} userId={userId}/>
     )

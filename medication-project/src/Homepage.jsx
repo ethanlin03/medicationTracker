@@ -14,6 +14,7 @@ import MedicationCard from './MedicationCard';
 
 const Homepage = ({returned_info, display, setDisplay, addedMedications, setAddedMedications, userId}) => {
     const [anchorEl, setAnchorEl] = useState(null);
+    const [updatedCard, setUpdatedCard] = useState(true);
     const open = Boolean(anchorEl);
     const handleClickMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -105,10 +106,10 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                 
                     <div style={{ width: '80%', margin: '5% auto', marginTop: '20px', marginBottom: '10px', backgroundColor: 'transparent', borderRadius: '20px', textAlign: 'center' }}>
                         <h2 style={{ fontFamily: 'Lexend, sans-serif', margin: '20px', color: '#65b5ff' }}>Added Medications</h2>
-                            <MedicationCard addedMedications={addedMedications} setAddedMedications={setAddedMedications} userId={userId}/>
+                            <MedicationCard addedMedications={addedMedications} setAddedMedications={setAddedMedications} userId={userId} setDisplay={setDisplay} setUpdatedCard={setUpdatedCard}/>
                     </div>
                 )}
-                {display === "homepage" && addedMedications.length === 0 && (
+                {display === "homepage" && addedMedications.length === 0 && updatedCard && (
                     <div style={{padding: '10px'}}>
                         <Typography style={{color: 'gray'}}>
                             No medications
