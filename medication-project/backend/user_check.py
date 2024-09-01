@@ -249,6 +249,35 @@ def updateMeds(person_id, med_id, amount, dosage, notes, importance):
         connection.close()
         print("Connection closed")
 
+def deleteMed(person_id, med_id):
+    msg = "Medicine wasn't deleted"
+    print(person_id, med_id)
+    try:
+        connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
+        cursor = connection.cursor(buffered=True)
+
+        queryDelete = """
+            DELETE FROM users_medications WHERE medication_id = %s AND person_id = %s;
+        """
+
+        cursor.execute(queryDelete, (med_id, person_id))
+        connection.commit()
+        
+        if cursor.rowcount > 0:
+            msg = "Medicine was deleted"
+
+        print(msg)
+        return msg
+
+    except mysql.connector.Error as error:
+        print("Error occured: ", error)
+
+    finally:
+        
+        cursor.close()
+        connection.close()
+        print("Connection closed")
+
 @app.route('/signup-form', methods=['POST'])
 def signup_form():
     data = request.json  # This will contain your form data
@@ -324,7 +353,6 @@ def users_medication_insertion():
 def get_added_medications():
 
     user_id = request.args.get('userId', type=int)
-    print(user_id)
     results = getAddedMeds(user_id)
 
     response = [
@@ -356,6 +384,20 @@ def update_medication():
     importance = data.get('importance')
 
     msg = updateMeds(person_id, med_id, amount, dosage, notes, importance)
+
+    response = {'message' : msg}
+    
+    return jsonify(response), 200
+
+@app.route('/medication-delete', methods=['POST'])
+def delete_medication():
+
+    data = request.json
+    person_id = data.get('userId')
+    med_id = data.get('medId')
+
+    msg = deleteMed(person_id, med_id)
+    print(msg)
 
     response = {'message' : msg}
     

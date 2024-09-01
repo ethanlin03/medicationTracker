@@ -13,10 +13,13 @@ import Alert from '@mui/material/Alert';
 import FormHelperText from '@mui/material/FormHelperText';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import axios from 'axios';
 
 const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurrentMed}) => {
     const [alert, setAlert] = useState(false);
+    const [deleteMed, setDeleteMed] = useState(false);
     const [changedImportanceValue, setChangedImportanceValue] = useState("");
     const [changedParams, setChangedParams] = useState(false);
     const [changedMeds, setChangedMeds] = useState({
@@ -66,6 +69,36 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
 
     const clickCancel = async(e) => {
         setAlert(false)
+    }
+
+    const handleDelete = async(e) => {
+        setDeleteMed(true)
+    }
+
+    const handleCancelDelete = async(e) => {
+        setDeleteMed(false)
+    }
+
+    const handleConfirmDelete = async(e) => {
+        console.log(userId, currentMed.id)
+        try {
+            const response = await axios.post('http://localhost:5000/medication-delete', {
+                  userId: userId,
+                  medId: currentMed.id
+              })
+            console.log(response.data.message)
+            if(response.data.message === "Medicine was deleted")
+            {
+                setAddedMedications((prevMedications) => 
+                    prevMedications.filter((medication) => medication.id !== currentMed.id)
+                );
+                setDeleteMed(false)
+                setDisplay("homepage")
+            }
+    
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
     const handleNewMedStats = async(e) => {
@@ -131,6 +164,28 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                 >
                     <HomeIcon sx={{fontSize: 38}} />
                 </IconButton>
+                { deleteMed && (
+                            <Card sx={{ position: 'fixed', 
+                                top: '20px', 
+                                left: '50%', 
+                                transform: 'translateX(-50%)', 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                alignItems: 'center', 
+                                borderWidth: '10px',
+                                backgroundColor: '#D3D3D3',
+                                width: '20%' }}>
+                                <Typography sx={{fontWeight: 'bold'}}>
+                                    Are you sure you want to delete {currentMed.medication_name}?
+                                </Typography>
+                                <Box sx={{ display: 'flex', margin: '10px',
+                                flexDirection: 'row', gap: '19px'}}>
+                                    <Button variant="contained" onClick={handleConfirmDelete}>Yes</Button>
+
+                                    <Button variant="contained" onClick={handleCancelDelete}>Cancel</Button>
+                                </Box>
+                            </Card>
+                        )}
                 {alert && (
                     <Box
                         sx={{
@@ -160,7 +215,7 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                     <div style={{ width: '30%', margin: '5% auto', marginBottom: '10px', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', textAlign: 'center' }}>
                         <Tooltip title={`Delete ${currentMed.medication_name}`} sx={{position: 'relative', top: 10, left: -360, fontSize: 30, cursor: 'pointer', marginBottom: '0px'}}> {/*moves when inspect is opened*/}
                             <IconButton>
-                                <DeleteIcon sx={{ color: 'red' }} />
+                                <DeleteIcon sx={{ color: 'red' }} onClick={handleDelete}/>
                             </IconButton>
                         </Tooltip>
                         <h1 style={{ fontFamily: 'Lexend, sans-serif', paddingTop: '10px', marginBottom: '50px', color: '#65b5ff' }}>Edit {currentMed.medication_name}</h1>
