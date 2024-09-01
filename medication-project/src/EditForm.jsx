@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Box, CssBaseline, ThemeProvider, TextField, InputAdornment, IconButton, Typography, Modal } from '@mui/material';
+import { Button, Box, CssBaseline, ThemeProvider, TextField, InputAdornment, IconButton, Typography, Icon } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from '@mui/material/Autocomplete';
 import HomeIcon from '@mui/icons-material/Home';
@@ -11,6 +11,8 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Alert from '@mui/material/Alert';
 import FormHelperText from '@mui/material/FormHelperText';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Tooltip from '@mui/material/Tooltip';
 import axios from 'axios';
 
 const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurrentMed}) => {
@@ -137,8 +139,14 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                             
                         }}
                     >
-                        <Alert variant="outlined" severity="warning">
-                            <h1>Leave changes?</h1>
+                        <Alert variant="outlined" severity="warning" sx={{position: 'absolute', 
+                                top: 10, 
+                                left: '50%', 
+                                transform: 'translateX(-50%)', 
+                                width: '50%', 
+                                marginBottom: '100px'
+                                }}>
+                            <h1>Leave site?</h1>
                             <Typography sx={{marginBottom: '10px'}}>
                                 Changes you made may not be saved.
                             </Typography>
@@ -150,7 +158,12 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                     </Box>
                 )}
                     <div style={{ width: '30%', margin: '5% auto', marginBottom: '10px', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', textAlign: 'center' }}>
-                        <h1 style={{ fontFamily: 'Lexend, sans-serif', paddingTop: '40px', marginBottom: '50px', color: '#65b5ff' }}>Edit {currentMed.medication_name}</h1>
+                        <Tooltip title={`Delete ${currentMed.medication_name}`} sx={{position: 'relative', top: 10, left: -360, fontSize: 30, cursor: 'pointer', marginBottom: '0px'}}> {/*moves when inspect is opened*/}
+                            <IconButton>
+                                <DeleteIcon sx={{ color: 'red' }} />
+                            </IconButton>
+                        </Tooltip>
+                        <h1 style={{ fontFamily: 'Lexend, sans-serif', paddingTop: '10px', marginBottom: '50px', color: '#65b5ff' }}>Edit {currentMed.medication_name}</h1>
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px' }}>
                                 <form style={{ width: '100%' }} onSubmit={handleNewMedStats}>
 
@@ -158,7 +171,6 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                                     variant="outlined"
                                     label="Amount Per Day"
                                     type="text"
-                                    defaultValue={currentMed.amount}
                                     helperText={"Current amount: " + currentMed.amount}
                                     name="amount"
                                     sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
@@ -168,7 +180,6 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                                     variant="outlined"
                                     label="Dosage (mg)"
                                     type="text"
-                                    defaultValue={currentMed.dosage}
                                     helperText={"Current dosage: " + currentMed.dosage}
                                     name="dosage"
                                     sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
@@ -177,7 +188,6 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                                     <TextField
                                     variant="outlined"
                                     label="Important Notes/Instructions"
-                                    defaultValue={currentMed.notes}
                                     helperText={"Current notes: " + currentMed.notes}
                                     type="text"
                                     name="notes"
