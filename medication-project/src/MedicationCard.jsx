@@ -6,19 +6,19 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { CardActions, Typography, Box, IconButton, Modal } from '@mui/material';
 import EditForm from './EditForm';
 
-const MedicationCard = ({addedMedications, setAddedMedications, userId, setDisplay, setUpdatedCard}) => {
+const MedicationCard = ({addedMedications, setAddedMedications, userId, setDisplay, setUpdatedCard, currentMed, setCurrentMed}) => {
     const [showInfoCard, setShowInfoCard] = useState(false);
-    const [showEditForm, setShowEditForm] = useState(false);
     const [selectedMed, setSelectedMed] = useState();
 
     const handleInfoClick = (med) => {
         setSelectedMed(med)
+        console.log(med)
         setShowInfoCard(true)
     }
 
     const handleEditClick = (med) => {
-        setSelectedMed(med)
-        setShowEditForm(true)
+        setCurrentMed(med)
+        setDisplay("editform")
     }
 
     const closeInfoModal = () => {
@@ -137,11 +137,6 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                 </>
             )}
 
-            {showEditForm && (
-                <>
-                    <EditForm showEditForm={showEditForm} setShowEditForm={setShowEditForm} selectedMed={selectedMed} userId={userId} setAddedMedications={setAddedMedications} setDisplay={setDisplay} setUpdatedCard={setUpdatedCard}/>
-                </>
-            )}
         </div>
     )
 }

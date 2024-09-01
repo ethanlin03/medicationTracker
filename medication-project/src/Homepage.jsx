@@ -12,7 +12,7 @@ import Formpage from './Formpage';
 import axios from 'axios';
 import MedicationCard from './MedicationCard';
 
-const Homepage = ({returned_info, display, setDisplay, addedMedications, setAddedMedications, userId}) => {
+const Homepage = ({returned_info, display, setDisplay, addedMedications, setAddedMedications, userId, currentMed, setCurrentMed}) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [updatedCard, setUpdatedCard] = useState(true);
     const open = Boolean(anchorEl);
@@ -106,7 +106,7 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                 
                     <div style={{ width: '80%', margin: '5% auto', marginTop: '20px', marginBottom: '10px', backgroundColor: 'transparent', borderRadius: '20px', textAlign: 'center' }}>
                         <h2 style={{ fontFamily: 'Lexend, sans-serif', margin: '20px', color: '#65b5ff' }}>Added Medications</h2>
-                            <MedicationCard addedMedications={addedMedications} setAddedMedications={setAddedMedications} userId={userId} setDisplay={setDisplay} setUpdatedCard={setUpdatedCard}/>
+                            <MedicationCard addedMedications={addedMedications} setAddedMedications={setAddedMedications} userId={userId} setDisplay={setDisplay} setUpdatedCard={setUpdatedCard} currentMed={currentMed} setCurrentMed={setCurrentMed}/>
                     </div>
                 )}
                 {display === "homepage" && addedMedications.length === 0 && updatedCard && (
