@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 import Formpage from './Formpage';
 import axios from 'axios';
 import MedicationCard from './MedicationCard';
@@ -59,21 +60,23 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
     return (
         <div className="App">
             <div>
-                <IconButton
-                    id="Menu"
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClickMenu}
-                    sx={{
-                    position: 'absolute',
-                    top: 10,
-                    left: 10,
-                    fontSize: 70,
-                    }}
-                >
-                    <MenuIcon sx={{fontSize: 38}}/>
-                </IconButton>
+                <Tooltip title="Menu">
+                    <IconButton
+                        id="Menu"
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClickMenu}
+                        sx={{
+                        position: 'absolute',
+                        top: 10,
+                        left: 10,
+                        fontSize: 70,
+                        }}
+                    >
+                        <MenuIcon sx={{fontSize: 38}}/>
+                    </IconButton>
+                </Tooltip>
                 
                 <Menu
                     anchorEl={anchorEl}
@@ -96,7 +99,9 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                     fontSize: 70,
                     }}
                 >
-                    <AccountCircleOutlinedIcon sx={{fontSize: 38}} />
+                    <Tooltip title="Account">
+                        <AccountCircleOutlinedIcon sx={{fontSize: 38}} />
+                    </Tooltip>
                 </IconButton>
 
                 <h1 style={{color:'gray'}}>

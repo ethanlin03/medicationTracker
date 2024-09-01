@@ -4,6 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { CardActions, Typography, Box, IconButton, Modal } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import EditForm from './EditForm';
 
 const MedicationCard = ({addedMedications, setAddedMedications, userId, setDisplay, setUpdatedCard, currentMed, setCurrentMed}) => {
@@ -52,14 +53,18 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                 >
                 <Card style={{ width: '100%', position: 'relative' }}>
                     <CardActions style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-                        <IconButton onClick={() => handleEditClick(med)}>
-                            <EditIcon/>
-                        </IconButton>
+                        <Tooltip title="Edit medication">
+                            <IconButton onClick={() => handleEditClick(med)}>
+                                <EditIcon/>
+                            </IconButton>
+                        </Tooltip>
                     </CardActions>
                     <CardActions style={{ position: 'absolute', top: '0', right: '0', padding: '8px' }}>
-                        <IconButton onClick={() => handleInfoClick(med)}>
-                            <InfoOutlinedIcon/>
-                        </IconButton>
+                        <Tooltip title="Medication Info">
+                            <IconButton onClick={() => handleInfoClick(med)}>
+                                <InfoOutlinedIcon/>
+                            </IconButton>
+                        </Tooltip>
                     </CardActions>
                     <CardContent>
                         <Typography variant="h5" component="div" color="text.primary" fontWeight='bold' sx={{ textTransform: 'capitalize' }}>
