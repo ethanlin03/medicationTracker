@@ -5,6 +5,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { CardActions, Typography, Box, IconButton, Modal } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import EditForm from './EditForm';
 
 const MedicationCard = ({addedMedications, setAddedMedications, userId, setDisplay, setUpdatedCard, currentMed, setCurrentMed}) => {
@@ -20,6 +24,21 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
     const handleEditClick = (med) => {
         setCurrentMed(med)
         setDisplay("editform")
+    }
+
+    const handleCheck = (index) => {
+        const updatedMedications = addedMedications.map((med, i) =>
+            i === index ? { ...med, taken: !med.taken } : med
+        );
+        var date = new Date().toLocaleTimeString();
+        var d = new Date(); // for now
+        d.getHours(); // => 9
+        d.getMinutes(); // =>  30
+        d.getSeconds();
+        console.log(d)
+        console.log(date)
+        console.log(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds())
+        setAddedMedications(updatedMedications);
     }
 
     const closeInfoModal = () => {
@@ -51,44 +70,51 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                           }
                 }
                 >
-                <Card style={{ width: '100%', position: 'relative' }}>
-                    <CardActions style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-                        <Tooltip title="Edit medication">
-                            <IconButton onClick={() => handleEditClick(med)}>
-                                <EditIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    </CardActions>
-                    <CardActions style={{ position: 'absolute', top: '0', right: '0', padding: '8px' }}>
-                        <Tooltip title="Medication Info">
-                            <IconButton onClick={() => handleInfoClick(med)}>
-                                <InfoOutlinedIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    </CardActions>
-                    <CardContent>
-                        <Typography variant="h5" component="div" color="text.primary" fontWeight='bold' sx={{ textTransform: 'capitalize' }}>
-                            {med.medication_name}
-                        </Typography>
-                        <Typography sx={{
-                                color: med.importance === 2 ? 'red' :
-                                    med.importance === 1 ? 'skyblue' : 'gray', 
+                    <Card style={{ width: '100%', position: 'relative' }}>
+                        <CardActions style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
+                            <Tooltip title="Edit medication">
+                                <IconButton onClick={() => handleEditClick(med)}>
+                                    <EditIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </CardActions>
+                        <CardActions style={{ position: 'absolute', top: '0', right: '0', padding: '8px' }}>
+                            <Tooltip title="Medication Info">
+                                <IconButton onClick={() => handleInfoClick(med)}>
+                                    <InfoOutlinedIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </CardActions>
+                        <CardContent>
+                            <Typography variant="h5" component="div" color="text.primary" fontWeight='bold' sx={{ textTransform: 'capitalize' }}>
+                                {med.medication_name}
+                            </Typography>
+                            <Typography sx={{
+                                    color: med.importance === 2 ? 'red' :
+                                        med.importance === 1 ? 'skyblue' : 'gray', 
 
-                                fontWeight: med.importance === 2 ? '900' :
-                                    med.importance === 1 ? '600' : '400',
-                                marginBottom: '20px'
-                                }}
-                        >
-                            {med.importance === 2 ? "Most Important" : (med.importance === 1 ? "Somewhat Important" : "Least Important")}
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            {med.dosage}mg with {med.amount} per day
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            Last Taken: {med.month}/{med.day}/{med.year}
-                        </Typography>
-                    </CardContent>
-                </Card>
+                                    fontWeight: med.importance === 2 ? '900' :
+                                        med.importance === 1 ? '600' : '400',
+                                    marginBottom: '20px'
+                                    }}
+                            >
+                                {med.importance === 2 ? "Most Important" : (med.importance === 1 ? "Somewhat Important" : "Least Important")}
+                            </Typography>
+                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                {med.dosage}mg with {med.amount} per day
+                            </Typography>
+                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                Last Taken: {med.month}/{med.day}/{med.year}
+                            </Typography>
+                            <Button
+                                variant="outlined"
+                                color={med.taken ? "success" : "primary"}
+                                onClick={() => handleCheck(index)}
+                            >
+                                Taken
+                            </Button>
+                        </CardContent>
+                    </Card>
                 </div>
             ))}
 
