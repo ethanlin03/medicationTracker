@@ -36,7 +36,8 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
         setMedicationStats((prev) => {
             return {
                 ...prev,
-                importance: newImportanceValue
+                importance: newImportanceValue,
+                person_id: userId
             }
         })
         console.log(importanceValue)
@@ -53,7 +54,7 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
         }
     }
 
-    const day = () => {
+    /*const day = () => {
         var today = new Date();
         var m = parseInt(String(today.getMonth() + 1).padStart(2, '0'));
         var d = parseInt(String(today.getDate()).padStart(2, '0'));
@@ -67,7 +68,7 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
                 person_id: userId
             }
         })
-    }
+    }*/
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -79,7 +80,6 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
 
     useEffect(() => {
         retrieveMeds(); 
-        day();
       }, []);
   
     const clickHome = async(e) => {

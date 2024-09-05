@@ -29,6 +29,10 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
         setAnchorEl(null);
     };
 
+    const handleTaken = (event) => {
+        setDisplay("takenform")
+    }
+
     const handleClick = () => {
         console.log('Icon clicked!');
     };
@@ -87,6 +91,7 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                     }}
                 >
                     <MenuItem onClick={handleAddMedicine}>Add Medication</MenuItem>
+                    <MenuItem onClick={handleTaken}>Taken Medications</MenuItem>
                     <MenuItem onClick={handleClickLogout}>Logout</MenuItem>
                 </Menu>
 

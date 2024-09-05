@@ -135,7 +135,7 @@ def insertUser(username, password, first, last):
 
     return msg
 
-def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year, importance):
+def insertUsersMeds(person_id, med_name, amount, dosage, notes, importance):
     msg = "Medicine was already added"
 
     try:
@@ -150,10 +150,10 @@ def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year
                 amount VARCHAR(255),
                 dosage VARCHAR(255),
                 notes VARCHAR(255),
-                month VARCHAR(255),
-                day VARCHAR(255),
-                year VARCHAR(255),
+                date VARCHAR(255),
+                time VARCHAR(255),
                 importance INT,
+                
                 PRIMARY KEY(medication_id, person_id)
             );
         """
@@ -165,7 +165,7 @@ def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year
         """
 
         queryInsert = """
-            INSERT INTO users_medications(medication_id, person_id, medication_name, amount, dosage, notes, month, day, year, importance) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+            INSERT INTO users_medications(medication_id, person_id, medication_name, amount, dosage, notes, importance) VALUES (%s, %s, %s, %s, %s, %s, %s);
         """
 
         cursor.execute(querySelect, (med_name,))
@@ -182,7 +182,7 @@ def insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year
             medicine_id = cursor.lastrowid
             msg = "New medicine was added and"
 
-        cursor.execute(queryInsert, (medicine_id, person_id, med_name, amount, dosage, notes, month, day, year, importance))
+        cursor.execute(queryInsert, (medicine_id, person_id, med_name, amount, dosage, notes, importance))
         msg += "user's medication has been inserted"
 
 
@@ -205,7 +205,7 @@ def getAddedMeds(person_id):
         cursor = connection.cursor(buffered=True)
 
         querySelect = """
-            SELECT medication_id, medication_name, amount, dosage, notes, month, day, year, importance FROM users_medications WHERE person_id = %s;
+            SELECT medication_id, medication_name, amount, dosage, notes, importance FROM users_medications WHERE person_id = %s;
         """
 
         cursor.execute(querySelect, (person_id,))
@@ -265,6 +265,39 @@ def deleteMed(person_id, med_id):
         
         if cursor.rowcount > 0:
             msg = "Medicine was deleted"
+
+        print(msg)
+        return msg
+
+    except mysql.connector.Error as error:
+        print("Error occured: ", error)
+
+    finally:
+        
+        cursor.close()
+        connection.close()
+        print("Connection closed")
+
+def takenMeds(userId, medications, date, time):
+    msg = "Medicine wasn't updated with date/time taken"
+    print(medications, date, time)
+    try:
+        connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
+        cursor = connection.cursor(buffered=True)
+
+        for medication in medications:
+
+            queryInsert = """
+                INSERT INTO users_medications WHERE medication_name = %s AND person_id = %s;
+            """
+
+            #need to update old db or make new one
+
+            cursor.execute(queryInsert, (medication, userId))
+            connection.commit()
+            
+            if cursor.rowcount > 0:
+                msg = "Medicine was updated with date/time taken"
 
         print(msg)
         return msg
@@ -339,11 +372,8 @@ def users_medication_insertion():
     amount = data.get('amount')
     dosage = data.get('dosage')
     notes = data.get('notes')
-    month = data.get('month')
-    day = data.get('day')
-    year = data.get('year')
     importance = data.get('importance')
-    msg, medicine_id = insertUsersMeds(person_id, med_name, amount, dosage, notes, month, day, year, importance)
+    msg, medicine_id = insertUsersMeds(person_id, med_name, amount, dosage, notes, importance)
 
     response = {'message': msg, 'medicine_id': medicine_id, 'person_id': person_id}
 
@@ -362,10 +392,7 @@ def get_added_medications():
             "amount": med[2],
             "dosage": med[3],
             "notes": med[4],
-            "month": med[5],
-            "day": med[6],
-            "year": med[7],
-            "importance" : med[8]
+            "importance" : med[5]
         }
         for med in results
     ]
@@ -402,6 +429,16 @@ def delete_medication():
     response = {'message' : msg}
     
     return jsonify(response), 200
+
+@app.route('/medication-taken', methods=['POST'])
+def taken_medication():
+
+    data = request.json
+    userId = data.get('userId')
+    medications = data.get('medications') #is an array
+    date = data.get('dateTaken')
+    time = data.get('timeTaken')
+    takenMeds(userId, medications, date, time)
 
 if __name__ == '__main__':
     app.run(debug=True)

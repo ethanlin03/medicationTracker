@@ -8,6 +8,7 @@ import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import Formpage from './Formpage';
 import EditForm from './EditForm';
+import TakenForm from './TakenForm';
 
 function App() {
   const [display, setDisplay] = useState("login")
@@ -69,6 +70,11 @@ function App() {
   else if(display === "editform") {
     return (
       <EditForm userId={userId} setAddedMedications={setAddedMedications} setDisplay={setDisplay} currentMed={currentMed} setCurrentMed={setCurrentMed}/>
+    )
+  }
+  else if(display === "takenform") {
+    return (
+      <TakenForm userId={userId} addedMedications={addedMedications} setAddedMedications={setAddedMedications} setDisplay={setDisplay}/>
     )
   }
 }

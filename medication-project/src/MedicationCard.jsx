@@ -23,22 +23,8 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
 
     const handleEditClick = (med) => {
         setCurrentMed(med)
+        console.log(med)
         setDisplay("editform")
-    }
-
-    const handleCheck = (index) => {
-        const updatedMedications = addedMedications.map((med, i) =>
-            i === index ? { ...med, taken: !med.taken } : med
-        );
-        var date = new Date().toLocaleTimeString();
-        var d = new Date(); // for now
-        d.getHours(); // => 9
-        d.getMinutes(); // =>  30
-        d.getSeconds();
-        console.log(d)
-        console.log(date)
-        console.log(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds())
-        setAddedMedications(updatedMedications);
     }
 
     const closeInfoModal = () => {
@@ -103,16 +89,9 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                 {med.dosage}mg with {med.amount} per day
                             </Typography>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            {/*<Typography sx={{ mb: 1.5 }} color="text.secondary">
                                 Last Taken: {med.month}/{med.day}/{med.year}
-                            </Typography>
-                            <Button
-                                variant="outlined"
-                                color={med.taken ? "success" : "primary"}
-                                onClick={() => handleCheck(index)}
-                            >
-                                Taken
-                            </Button>
+                            </Typography>*/}
                         </CardContent>
                     </Card>
                 </div>
