@@ -1,4 +1,4 @@
-import { Button, Box, IconButton, TextField } from '@mui/material';
+import { Button, Box, IconButton, TextField, Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import HomeIcon from '@mui/icons-material/Home';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
@@ -26,45 +26,68 @@ function currentTime() {
 const TakenForm = ({userId, addedMedications, setAddedMedications, setDisplay}) => {
     const [value, setValue] = useState([]);
     const [inputValue, setInputValue] = useState("");
+    const [message, setMessage] = useState("");
     const [date, setDate] = useState(currentDate());
     const [time, setTime] = useState(currentTime());
-    const [chosenMeds, setChosenMeds] = useState("");
+    const [chosenMeds, setChosenMeds] = useState({
+        userId: userId,
+        medications: [],
+        dateTaken: currentDate(),
+        timeTaken: currentTime()
+    });
 
     const handleTimeChange = (newTime) => {
         const formattedDate = newTime.format('MM/DD/YY'); // Example: September 04, 2024 8:05 PM
         const formattedTime = newTime.format('h:mm A');
         setDate(formattedDate)
         setTime(formattedTime)
+        setChosenMeds((prev) => {
+            return {...prev, timeTaken: formattedTime, dateTaken: formattedDate}
+        })
     };
 
     const clickHome = async(e) => {
         console.log("Selected Medications:", chosenMeds);
         console.log("Selected date:", date);
         console.log("Selected time:", time);
-        setChosenMeds([])
+        console.log(addedMedications);
+        setChosenMeds({
+            userId: userId,
+            medications: [],
+            dateTaken: currentDate(),
+            timeTaken: currentTime()
+        });
         setDisplay("homepage")
-    }
-
-    const handleChange = async(e) => {
-        console.log(date)
     }
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        setChosenMeds((prev) => [
-            ...prev, 
-            { userId: userId, medications: value, dateTaken: date, timeTaken: time }
-        ]);
         try {
             const response = await axios.post('http://localhost:5000/medication-taken', chosenMeds);
             console.log(response.data)
 
-            if(response.data.message !== "Medicine wasn't updated with time taken")
+            if(response.data.message !== "Medicine wasn't updated with date/time taken")
             {
+                setAddedMedications((prevAddedMedications) =>
+                prevAddedMedications.map((addedMed) => {
+                    const chosenMed = chosenMeds.medications.find(
+                        (med) => med.medications === addedMed.medication_name
+                    );
+                    if (chosenMed) {
+                        // Update the date and time if medication names match
+                        return {
+                            ...addedMed,
+                            date: chosenMed.dateTaken,
+                            time: chosenMed.timeTaken,
+                        };
+                    }
+                    return addedMed; // Return the original medication if no match is found
+                })
+            );
                 setDisplay("homepage")
             }
-            //else
-                //setMessage(response.data.message)
+            else
+                setMessage(response.data.message)
         } catch (error) {
             console.error('Error:', error);
         }
@@ -105,6 +128,12 @@ const TakenForm = ({userId, addedMedications, setAddedMedications, setDisplay}) 
                                 value={value}
                                 onChange={(event, newValue) => {
                                     setValue(newValue);
+                                    setChosenMeds((prev) => {
+                                        return {
+                                            ...prev,
+                                        medications: newValue,
+                                        }
+                                    })
                                 }}
                                 id="Chosen_meds"
                                 options={addedMedications.map((option) => option.medication_name)}
@@ -127,6 +156,7 @@ const TakenForm = ({userId, addedMedications, setAddedMedications, setDisplay}) 
                         </form>
                     </Box>
                 </div>
+                <Typography style={{color: 'red'}}>{message}</Typography>
             </div>
         </LocalizationProvider>
     )

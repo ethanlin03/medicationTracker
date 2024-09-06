@@ -10,10 +10,18 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import EditForm from './EditForm';
+import dayjs from 'dayjs';
+
+const getCurrentDay = () => {
+    const date = new Date();
+    const currentDate = dayjs(date).format('MM/DD/YY');
+    return currentDate
+}
 
 const MedicationCard = ({addedMedications, setAddedMedications, userId, setDisplay, setUpdatedCard, currentMed, setCurrentMed}) => {
     const [showInfoCard, setShowInfoCard] = useState(false);
     const [selectedMed, setSelectedMed] = useState();
+    const [currentDay, setCurrentDay] = useState(getCurrentDay())
 
     const handleInfoClick = (med) => {
         setSelectedMed(med)
@@ -89,9 +97,21 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                 {med.dosage}mg with {med.amount} per day
                             </Typography>
-                            {/*<Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                Last Taken: {med.month}/{med.day}/{med.year}
-                            </Typography>*/}
+                            {
+                                med.date === null && med.time === null ? (
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    Last time and date taken hasn't been added
+                                    </Typography>
+                                ) : ( med.date === currentDay ) ? (
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    Last Taken: Today @ {med.time}
+                                    </Typography>
+                                ) : (
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    Last Taken: {med.date} @ {med.time}
+                                    </Typography>
+                                )
+                            }
                         </CardContent>
                     </Card>
                 </div>

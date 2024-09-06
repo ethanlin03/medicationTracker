@@ -205,7 +205,7 @@ def getAddedMeds(person_id):
         cursor = connection.cursor(buffered=True)
 
         querySelect = """
-            SELECT medication_id, medication_name, amount, dosage, notes, importance FROM users_medications WHERE person_id = %s;
+            SELECT medication_id, medication_name, amount, dosage, notes, date, time, importance FROM users_medications WHERE person_id = %s;
         """
 
         cursor.execute(querySelect, (person_id,))
@@ -280,24 +280,25 @@ def deleteMed(person_id, med_id):
 
 def takenMeds(userId, medications, date, time):
     msg = "Medicine wasn't updated with date/time taken"
-    print(medications, date, time)
+    print(medications)
     try:
         connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
         cursor = connection.cursor(buffered=True)
 
         for medication in medications:
 
-            queryInsert = """
-                INSERT INTO users_medications WHERE medication_name = %s AND person_id = %s;
+            queryUpdate = """
+                UPDATE users_medications SET date = %s, time = %s WHERE medication_name = %s AND person_id = %s;
             """
 
-            #need to update old db or make new one
-
-            cursor.execute(queryInsert, (medication, userId))
+            cursor.execute(queryUpdate, (date, time, medication, userId))
             connection.commit()
             
             if cursor.rowcount > 0:
                 msg = "Medicine was updated with date/time taken"
+            else:
+                msg = f"Medicine '{medication}' was updated with date/time taken"
+                break
 
         print(msg)
         return msg
@@ -392,7 +393,9 @@ def get_added_medications():
             "amount": med[2],
             "dosage": med[3],
             "notes": med[4],
-            "importance" : med[5]
+            "date": med[5],
+            "time": med[6],
+            "importance" : med[7]
         }
         for med in results
     ]
@@ -438,7 +441,12 @@ def taken_medication():
     medications = data.get('medications') #is an array
     date = data.get('dateTaken')
     time = data.get('timeTaken')
-    takenMeds(userId, medications, date, time)
+    print(userId, medications, date, time)
+    msg = takenMeds(userId, medications, date, time)
+
+    response = {'message' : msg}
+    
+    return jsonify(response), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
