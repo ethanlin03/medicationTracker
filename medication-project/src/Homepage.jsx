@@ -9,6 +9,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Badge from '@mui/material/Badge';
 import Formpage from './Formpage';
 import axios from 'axios';
 import MedicationCard from './MedicationCard';
@@ -107,6 +109,23 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                     <Tooltip title="Account">
                         <AccountCircleOutlinedIcon sx={{fontSize: 38}} />
                     </Tooltip>
+                </IconButton>
+
+                
+                <IconButton
+                    onClick={handleClick}
+                    sx={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 70,
+                    fontSize: 70,
+                    }}
+                >
+                    <Badge color="primary" badgeContent={100}>
+                        <Tooltip title="Notifications">
+                            <NotificationsIcon sx={{fontSize: 38}} />
+                        </Tooltip>
+                    </Badge>
                 </IconButton>
 
                 <h1 style={{color:'gray'}}>
