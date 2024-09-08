@@ -97,6 +97,9 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                 {med.dosage}mg with {med.amount} per day
                             </Typography>
+                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                Quantity: {med.quantity - med.total_taken} out of {med.quantity} pills left
+                            </Typography>
                             {
                                 med.date === null && med.time === null ? (
                                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -153,9 +156,21 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                             <Typography sx={{ mb: 0.5 }} color="text.secondary">
                                 Amount Per Day: {selectedMed.amount}
                             </Typography>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                Last Taken: {selectedMed.month}/{selectedMed.day}/{selectedMed.year}
-                            </Typography>
+                            {
+                                selectedMed.date === null && selectedMed.time === null ? (
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    Last time and date taken hasn't been added
+                                    </Typography>
+                                ) : ( selectedMed.date === currentDay ) ? (
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    Last Taken: Today @ {selectedMed.time}
+                                    </Typography>
+                                ) : (
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    Last Taken: {selectedMed.date} @ {selectedMed.time}
+                                    </Typography>
+                                )
+                            }
                             <Box sx={{
                                 color: selectedMed.importance === 2 ? 'red' :
                                     selectedMed.importance === 1 ? 'skyblue' : 'gray'

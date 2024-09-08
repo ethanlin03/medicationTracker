@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Homepage from './Homepage';
 
@@ -26,6 +26,18 @@ function App() {
       first_name: "",
       last_name: "",
     })
+
+  useEffect(() => {
+    const today = new Date().toDateString(); // e.g., "Thu Sep 07 2024"
+    const lastReset = localStorage.getItem('lastResetDate');
+    console.log(lastReset)
+    console.log(today)
+    
+    if (lastReset !== today) {
+      localStorage.setItem('lastResetDate', today);
+      console.log(lastReset);
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -135,7 +135,7 @@ def insertUser(username, password, first, last):
 
     return msg
 
-def insertUsersMeds(person_id, med_name, amount, dosage, notes, importance):
+def insertUsersMeds(person_id, med_name, amount, dosage, notes, importance, quantity):
     msg = "Medicine was already added"
 
     try:
@@ -165,7 +165,7 @@ def insertUsersMeds(person_id, med_name, amount, dosage, notes, importance):
         """
 
         queryInsert = """
-            INSERT INTO users_medications(medication_id, person_id, medication_name, amount, dosage, notes, importance) VALUES (%s, %s, %s, %s, %s, %s, %s);
+            INSERT INTO users_medications(medication_id, person_id, medication_name, amount, dosage, notes, importance, total_quantity) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
         """
 
         cursor.execute(querySelect, (med_name,))
@@ -182,7 +182,7 @@ def insertUsersMeds(person_id, med_name, amount, dosage, notes, importance):
             medicine_id = cursor.lastrowid
             msg = "New medicine was added and"
 
-        cursor.execute(queryInsert, (medicine_id, person_id, med_name, amount, dosage, notes, importance))
+        cursor.execute(queryInsert, (medicine_id, person_id, med_name, amount, dosage, notes, importance, quantity))
         msg += "user's medication has been inserted"
 
 
@@ -205,7 +205,7 @@ def getAddedMeds(person_id):
         cursor = connection.cursor(buffered=True)
 
         querySelect = """
-            SELECT medication_id, medication_name, amount, dosage, notes, date, time, importance FROM users_medications WHERE person_id = %s;
+            SELECT medication_id, medication_name, amount, dosage, notes, date, time, importance, total_quantity, total_amt_taken FROM users_medications WHERE person_id = %s;
         """
 
         cursor.execute(querySelect, (person_id,))
@@ -222,17 +222,17 @@ def getAddedMeds(person_id):
         connection.close()
         print("Connection closed")
 
-def updateMeds(person_id, med_id, amount, dosage, notes, importance):
+def updateMeds(person_id, med_id, amount, dosage, notes, importance, quantity, amt_taken):
     msg = "Medicine wasn't updated"
     try:
         connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
         cursor = connection.cursor(buffered=True)
 
         queryUpdate = """
-            UPDATE users_medications SET amount = %s, dosage = %s, notes = %s, importance = %s WHERE person_id = %s AND medication_id = %s;
+            UPDATE users_medications SET amount = %s, dosage = %s, notes = %s, importance = %s, total_quantity = %s, total_amt_taken = %s WHERE person_id = %s AND medication_id = %s;
         """
 
-        cursor.execute(queryUpdate, (amount, dosage, notes, importance, person_id, med_id))
+        cursor.execute(queryUpdate, (amount, dosage, notes, importance, quantity, amt_taken, person_id, med_id))
         connection.commit()
         
         if cursor.rowcount > 0:
@@ -374,7 +374,8 @@ def users_medication_insertion():
     dosage = data.get('dosage')
     notes = data.get('notes')
     importance = data.get('importance')
-    msg, medicine_id = insertUsersMeds(person_id, med_name, amount, dosage, notes, importance)
+    quantity = data.get('total_quantity')
+    msg, medicine_id = insertUsersMeds(person_id, med_name, amount, dosage, notes, importance, quantity)
 
     response = {'message': msg, 'medicine_id': medicine_id, 'person_id': person_id}
 
@@ -395,7 +396,9 @@ def get_added_medications():
             "notes": med[4],
             "date": med[5],
             "time": med[6],
-            "importance" : med[7]
+            "importance" : med[7],
+            "quantity": med[8],
+            "total_taken": med[9]
         }
         for med in results
     ]
@@ -412,8 +415,10 @@ def update_medication():
     dosage = data.get('dosage')
     notes = data.get('notes')
     importance = data.get('importance')
+    quantity = data.get('quantity')
+    total_amt_taken = data.get('total_taken')
 
-    msg = updateMeds(person_id, med_id, amount, dosage, notes, importance)
+    msg = updateMeds(person_id, med_id, amount, dosage, notes, importance, quantity, total_amt_taken)
 
     response = {'message' : msg}
     

@@ -164,6 +164,14 @@ const Formpage = ({userId, setUserId, addedMedications, setAddedMedications, set
                     />
                     <TextField
                     variant="outlined"
+                    label="Total Quantity"
+                    type="text"
+                    name="total_quantity"
+                    sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
+                    onChange={handleChange}
+                    />
+                    <TextField
+                    variant="outlined"
                     label="Dosage (mg)"
                     type="text"
                     name="dosage"

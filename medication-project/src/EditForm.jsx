@@ -28,7 +28,11 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
         amount: currentMed.amount,
         dosage: currentMed.dosage,
         notes: currentMed.notes,
-        importance: currentMed.importance
+        importance: currentMed.importance,
+        date: currentMed.date,
+        time: currentMed.time,
+        quantity: currentMed.quantity,
+        total_taken: currentMed.total_taken
     })
 
     const changedImportanceChange = (event) => {
@@ -117,9 +121,10 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                     dosage: changedMeds.dosage,
                     notes: changedMeds.notes,
                     importance: changedMeds.importance,
-                    month: currentMed.month,
-                    day: currentMed.day,
-                    year: currentMed.year
+                    date: currentMed.date,
+                    time: currentMed.time,
+                    quantity: changedMeds.quantity,
+                    total_taken: changedMeds.total_taken
                 }
                 console.log(newMedication)
                 setAddedMedications(prevMedications => {
@@ -228,6 +233,24 @@ const EditForm = ({userId, setAddedMedications, setDisplay, currentMed, setCurre
                                     type="text"
                                     helperText={"Current amount: " + currentMed.amount}
                                     name="amount"
+                                    sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
+                                    onChange={handleChange}
+                                    />
+                                    <TextField
+                                    variant="outlined"
+                                    label="Quantity"
+                                    type="text"
+                                    helperText={"Current total quantity: " + currentMed.quantity}
+                                    name="quantity"
+                                    sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
+                                    onChange={handleChange}
+                                    />
+                                    <TextField
+                                    variant="outlined"
+                                    label="Total Amount Taken"
+                                    type="text"
+                                    helperText={"Current total taken: " + currentMed.total_taken}
+                                    name="total_taken"
                                     sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
                                     onChange={handleChange}
                                     />
