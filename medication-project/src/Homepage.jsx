@@ -39,6 +39,16 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
         console.log('Icon clicked!');
     };
 
+    const handleReset = async() => {
+        try {
+            console.log(userId)
+            const response = await axios.post('http://localhost:5000/medication-reset');
+            console.log(response.data.message)
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     const checkForAnyMeds = async() => {
         try {
             console.log(userId)
@@ -55,6 +65,15 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
     }
 
     useEffect(() => {
+        const today = new Date().toDateString(); // e.g., "Thu Sep 07 2024"
+        const lastReset = localStorage.getItem('lastResetDate');
+        console.log(lastReset)
+        console.log(today)
+        if (lastReset !== today) {
+            localStorage.setItem('lastResetDate', today);
+            handleReset()
+        }
+
         checkForAnyMeds()
         console.log(addedMedications)
     }, []);

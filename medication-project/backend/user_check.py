@@ -205,7 +205,7 @@ def getAddedMeds(person_id):
         cursor = connection.cursor(buffered=True)
 
         querySelect = """
-            SELECT medication_id, medication_name, amount, dosage, notes, date, time, importance, total_quantity, total_amt_taken FROM users_medications WHERE person_id = %s;
+            SELECT medication_id, medication_name, amount, dosage, notes, date, time, importance, total_quantity, total_amt_taken, amount_today FROM users_medications WHERE person_id = %s;
         """
 
         cursor.execute(querySelect, (person_id,))
@@ -288,7 +288,7 @@ def takenMeds(userId, medications, date, time):
         for medication in medications:
 
             queryUpdate = """
-                UPDATE users_medications SET date = %s, time = %s WHERE medication_name = %s AND person_id = %s;
+                UPDATE users_medications SET date = %s, time = %s, amount_today = amount_today + 1, total_amt_taken = total_amt_taken + 1 WHERE medication_name = %s AND person_id = %s;
             """
 
             cursor.execute(queryUpdate, (date, time, medication, userId))
@@ -297,8 +297,36 @@ def takenMeds(userId, medications, date, time):
             if cursor.rowcount > 0:
                 msg = "Medicine was updated with date/time taken"
             else:
-                msg = f"Medicine '{medication}' was updated with date/time taken"
+                msg = "Medicine wasn't updated with date/time taken"
                 break
+
+        print(msg)
+        return msg
+
+    except mysql.connector.Error as error:
+        print("Error occured: ", error)
+
+    finally:
+        
+        cursor.close()
+        connection.close()
+        print("Connection closed")
+
+def resetMeds():
+    msg = "Medicine wasn't reset"
+    try:
+        connection = mysql.connector.connect(user=Constants.USER, password=Constants.PASSWORD, database=Constants.DATABASE)
+        cursor = connection.cursor(buffered=True)
+
+        queryUpdate = """
+            UPDATE users_medications SET amount_today = 0;
+        """
+
+        cursor.execute(queryUpdate)
+        connection.commit()
+
+        if cursor.rowcount > 0:
+            msg = "Medicine was reset"
 
         print(msg)
         return msg
@@ -398,7 +426,8 @@ def get_added_medications():
             "time": med[6],
             "importance" : med[7],
             "quantity": med[8],
-            "total_taken": med[9]
+            "total_taken": med[9],
+            "amount_today": med[10]
         }
         for med in results
     ]
@@ -419,6 +448,15 @@ def update_medication():
     total_amt_taken = data.get('total_taken')
 
     msg = updateMeds(person_id, med_id, amount, dosage, notes, importance, quantity, total_amt_taken)
+
+    response = {'message' : msg}
+    
+    return jsonify(response), 200
+
+@app.route('/medication-reset', methods=['POST'])
+def reset_medication():
+
+    msg = resetMeds()
 
     response = {'message' : msg}
     

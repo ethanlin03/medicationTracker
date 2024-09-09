@@ -101,6 +101,17 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                                 Quantity: {med.quantity - med.total_taken} out of {med.quantity} pills left
                             </Typography>
                             {
+                                med.amount_today === 0 || med.amount_today === med.amount ? (
+                                    <Typography sx={{ mb: 0.1 }} color="text.secondary">
+                                        You have {med.amount - med.amount_today} pill(s) to take
+                                    </Typography>
+                                ) : (
+                                    <Typography sx={{ mb: 0.1 }} color="text.secondary">
+                                        You still have {med.amount - med.amount_today} pill(s) to take
+                                    </Typography>
+                                )
+                            }
+                            {
                                 med.date === null && med.time === null ? (
                                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                     Last time and date taken hasn't been added
@@ -154,7 +165,13 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                                 Dosage: {selectedMed.dosage}mg
                             </Typography>
                             <Typography sx={{ mb: 0.5 }} color="text.secondary">
-                                Amount Per Day: {selectedMed.amount}
+                                Quantity Left: {selectedMed.quantity - selectedMed.total_taken} pills
+                            </Typography>
+                            <Typography sx={{ mb: 0.5 }} color="text.secondary">
+                                Amount Per Day: {selectedMed.amount} pills
+                            </Typography>
+                            <Typography sx={{ mb: 0.5 }} color="text.secondary">
+                                Amount Remaining for Today: {selectedMed.amount - selectedMed.amount_today} pills
                             </Typography>
                             {
                                 selectedMed.date === null && selectedMed.time === null ? (

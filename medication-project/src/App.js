@@ -27,37 +27,6 @@ function App() {
       last_name: "",
     })
 
-  useEffect(() => {
-    const today = new Date().toDateString(); // e.g., "Thu Sep 07 2024"
-    const lastReset = localStorage.getItem('lastResetDate');
-    console.log(lastReset)
-    console.log(today)
-    
-    if (lastReset !== today) {
-      localStorage.setItem('lastResetDate', today);
-      console.log(lastReset);
-    }
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInfo((prev) => {
-        return { ...prev, [name]: value }
-    })
-  }
-
-  /**const logout = () => {
-    setDisplay("login")
-  }*/
-
-  const signup = () => {
-    setDisplay("signup")
-  }
-
-  const login = () => {
-    setDisplay("login")
-  }
-
   if (display === "login") {
     return (
       <LoginForm info={info} setInfo={setInfo} userId={userId} setUserId={setUserId} setReturnedInfo={setReturnedInfo} setDisplay={setDisplay}/>

@@ -25,7 +25,6 @@ function currentTime() {
 
 const TakenForm = ({userId, addedMedications, setAddedMedications, setDisplay}) => {
     const [value, setValue] = useState([]);
-    const [inputValue, setInputValue] = useState("");
     const [message, setMessage] = useState("");
     const [date, setDate] = useState(currentDate());
     const [time, setTime] = useState(currentTime());
