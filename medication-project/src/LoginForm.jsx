@@ -48,8 +48,9 @@ const LoginForm = ({info, setInfo, userId, setUserId, setReturnedInfo, setDispla
           if(response.data.message === "Login successful.")
           {
             await getUserPass(response.data.username, response.data.password)
+            setDisplay("homepage")
           }
-          setDisplay("homepage")
+          
         } catch (error) {
           console.error('Error:', error);
         }

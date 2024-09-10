@@ -14,21 +14,36 @@ import Badge from '@mui/material/Badge';
 import Formpage from './Formpage';
 import axios from 'axios';
 import MedicationCard from './MedicationCard';
+import Notifications from './Notifications';
 
 const Homepage = ({returned_info, display, setDisplay, addedMedications, setAddedMedications, userId, currentMed, setCurrentMed}) => {
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+    const [notificationAnchorEl, setNotificationAnchorEl] = useState(null); 
+    const menuOpen = Boolean(menuAnchorEl);
+    const notificationOpen = Boolean(notificationAnchorEl);
     const [updatedCard, setUpdatedCard] = useState(true);
-    const open = Boolean(anchorEl);
-    const handleClickMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+
+    const medsWithNotif = addedMedications.filter(med => med.amount_taken !== med.amount);
+    const notifCount = medsWithNotif.length;
 
     const handleClickLogout = (event) => {
         setDisplay("login")
     };
     
-    const handleClose = () => {
-        setAnchorEl(null);
+    const handleClickMenu = (event) => {
+      setMenuAnchorEl(event.currentTarget);
+    };
+    
+    const handleCloseMenu = () => {
+      setMenuAnchorEl(null);
+    };
+    
+    const handleNotification = (event) => {
+      setNotificationAnchorEl(event.currentTarget);
+    };
+    
+    const handleCloseNotification = () => {
+      setNotificationAnchorEl(null);
     };
 
     const handleTaken = (event) => {
@@ -85,28 +100,28 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
     return (
         <div className="App">
             <div>
-                <Tooltip title="Menu">
-                    <IconButton
-                        id="Menu"
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClickMenu}
-                        sx={{
-                        position: 'absolute',
-                        top: 10,
-                        left: 10,
-                        fontSize: 70,
-                        }}
-                    >
+                {/* Menu Icon */}
+                <IconButton
+                    id="Menu"
+                    aria-controls={menuOpen ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={menuOpen ? 'true' : undefined}
+                    onClick={handleClickMenu}
+                    sx={{
+                    position: 'absolute',
+                    top: 10,
+                    left: 10,
+                    fontSize: 70,
+                    }}
+                >
+                    <Tooltip title="Menu">
                         <MenuIcon sx={{fontSize: 38}}/>
-                    </IconButton>
-                </Tooltip>
-                
+                    </Tooltip>
+                </IconButton>
                 <Menu
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
+                    anchorEl={menuAnchorEl}
+                    open={menuOpen}
+                    onClose={handleCloseMenu}
                     MenuListProps={{
                     'aria-labelledby': 'basic-button',
                     }}
@@ -115,7 +130,8 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                     <MenuItem onClick={handleTaken}>Taken Medications</MenuItem>
                     <MenuItem onClick={handleClickLogout}>Logout</MenuItem>
                 </Menu>
-
+                
+                {/* Account Icon */}
                 <IconButton
                     onClick={handleClick}
                     sx={{
@@ -130,9 +146,12 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                     </Tooltip>
                 </IconButton>
 
-                
+                {/* Notification Icon */}
                 <IconButton
-                    onClick={handleClick}
+                    aria-controls={notificationOpen ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={notificationOpen ? 'true' : undefined}
+                    onClick={handleNotification}
                     sx={{
                     position: 'absolute',
                     top: 10,
@@ -140,12 +159,25 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
                     fontSize: 70,
                     }}
                 >
-                    <Badge color="primary" badgeContent={100}>
+                
+                    <Badge color="primary" badgeContent={notifCount}>
                         <Tooltip title="Notifications">
                             <NotificationsIcon sx={{fontSize: 38}} />
                         </Tooltip>
                     </Badge>
                 </IconButton>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={notificationAnchorEl}
+                    open={notificationOpen}
+                    onClose={handleCloseNotification}
+                    MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                    }}
+                    >
+                    <Notifications addedMedications={addedMedications}/>
+                        
+                </Menu>
 
                 <h1 style={{color:'gray'}}>
                     Welcome {returned_info.first_name} {returned_info.last_name}!

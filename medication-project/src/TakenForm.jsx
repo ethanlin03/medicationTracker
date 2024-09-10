@@ -46,10 +46,6 @@ const TakenForm = ({userId, addedMedications, setAddedMedications, setDisplay}) 
     };
 
     const clickHome = async(e) => {
-        console.log("Selected Medications:", chosenMeds);
-        console.log("Selected date:", date);
-        console.log("Selected time:", time);
-        console.log(addedMedications);
         setChosenMeds({
             userId: userId,
             medications: [],
@@ -96,7 +92,7 @@ const TakenForm = ({userId, addedMedications, setAddedMedications, setDisplay}) 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className="App">
                 <div style={{
-                    width: '30%',
+                    width: '40%',
                     margin: '5% auto',
                     marginBottom: '10px',
                     backgroundColor: '#fff',
@@ -120,36 +116,32 @@ const TakenForm = ({userId, addedMedications, setAddedMedications, setDisplay}) 
                         Taken medications
                     </h1>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px'}}>
                         <form style={{ width: '100%' }} onSubmit={handleSubmit}>
-                            <Autocomplete
-                                multiple
-                                value={value}
-                                onChange={(event, newValue) => {
+                            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
+                                <Autocomplete
+                                    
+                                    multiple
+                                    value={value}
+                                    onChange={(event, newValue) => {
                                     setValue(newValue);
-                                    setChosenMeds((prev) => {
-                                        return {
-                                            ...prev,
+                                    setChosenMeds((prev) => ({
+                                        ...prev,
                                         medications: newValue,
-                                        }
-                                    })
-                                }}
-                                id="Chosen_meds"
-                                options={addedMedications.map((option) => option.medication_name)}
-                                renderInput={(params) => <TextField {...params} label="Medications" name="medication_name"/>}
-                                sx={{ width: '100%', backgroundColor: 'white', marginBottom: '20px' }}
-                                
-                            />
-                            <DemoContainer components={['TimePicker']} sx={{marginBottom: '20px'}}>
-                                <DemoItem label="Taken at:">
-                                    <TimePicker
-                                        value={dayjs(date)}
-                                        onChange={(newValue) => handleTimeChange(newValue)}
-                                    />
-                                </DemoItem>
-                            </DemoContainer>
-
-                            <Button type="submit" variant="contained" sx={{ backgroundColor: '#65b5ff', width: '70%', marginBottom: '20px' }}>
+                                    }));
+                                    }}
+                                    id="Chosen_meds"
+                                    options={addedMedications.map((option) => option.medication_name)}
+                                    renderInput={(params) => <TextField {...params} label="Medications" name="medication_name" />}
+                                    sx={{ width: '60%', backgroundColor: 'white', marginBottom: '20px' }} // Reduced width for row alignment
+                                />
+                                <DemoContainer components={['TimePicker']} sx={{ width: '28%', marginBottom: '20px'}}>
+                                    <DemoItem>
+                                        <TimePicker label="Taken at:" value={dayjs()} onChange={(newValue) => handleTimeChange(newValue)} />
+                                    </DemoItem>
+                                </DemoContainer>
+                            </Box>
+                            <Button type="submit" variant="contained" sx={{ backgroundColor: '#65b5ff', width: '20%', marginBottom: '20px' }}>
                                 Submit
                             </Button>
                         </form>

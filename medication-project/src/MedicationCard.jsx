@@ -103,11 +103,11 @@ const MedicationCard = ({addedMedications, setAddedMedications, userId, setDispl
                             {
                                 med.amount_today === 0 || med.amount_today === med.amount ? (
                                     <Typography sx={{ mb: 0.1 }} color="text.secondary">
-                                        You have {med.amount - med.amount_today} pill(s) to take
+                                        You have {med.amount - med.amount_today} pill(s) to take today
                                     </Typography>
                                 ) : (
                                     <Typography sx={{ mb: 0.1 }} color="text.secondary">
-                                        You still have {med.amount - med.amount_today} pill(s) to take
+                                        You still have {med.amount - med.amount_today} pill(s) to take today
                                     </Typography>
                                 )
                             }
