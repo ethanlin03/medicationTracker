@@ -27,6 +27,7 @@ const Homepage = ({returned_info, display, setDisplay, addedMedications, setAdde
     const notifCount = medsWithNotif.length;
 
     const handleClickLogout = (event) => {
+        sessionStorage.clear();
         setDisplay("login")
     };
     
